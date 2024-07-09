@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage
+package com.hongstudio.kakaosearchimage.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hongstudio.kakaosearchimage.BuildConfig
+import com.hongstudio.kakaosearchimage.R
+import com.hongstudio.kakaosearchimage.database.DocumentDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
+import com.hongstudio.kakaosearchimage.model.Document
+import com.hongstudio.kakaosearchimage.model.GetSearchedImagesResponse
+import com.hongstudio.kakaosearchimage.service.SearchImageService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -32,8 +38,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,7 +89,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
                         activity?.runOnUiThread {
                             adapter = ImagesAdapter(dataset, ::onClickFavorite)
-                            binding.recyclerViewImageList.layoutManager = LinearLayoutManager(context)
+                            binding.recyclerViewImageList.layoutManager =
+                                LinearLayoutManager(context)
                             binding.recyclerViewImageList.adapter = adapter
                         }
                     }

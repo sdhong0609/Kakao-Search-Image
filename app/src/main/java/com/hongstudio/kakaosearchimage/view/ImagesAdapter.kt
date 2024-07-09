@@ -1,10 +1,11 @@
-package com.hongstudio.kakaosearchimage
+package com.hongstudio.kakaosearchimage.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
+import com.hongstudio.kakaosearchimage.model.Document
 
 class ImagesAdapter(
     private val dataSet: List<Document>,

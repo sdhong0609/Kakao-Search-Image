@@ -1,5 +1,6 @@
-package com.hongstudio.kakaosearchimage
+package com.hongstudio.kakaosearchimage.service
 
+import com.hongstudio.kakaosearchimage.model.GetSearchedImagesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

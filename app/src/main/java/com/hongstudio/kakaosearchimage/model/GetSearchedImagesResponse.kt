@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage
+package com.hongstudio.kakaosearchimage.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

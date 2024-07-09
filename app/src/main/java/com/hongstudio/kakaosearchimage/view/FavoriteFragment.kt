@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage
+package com.hongstudio.kakaosearchimage.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hongstudio.kakaosearchimage.R
+import com.hongstudio.kakaosearchimage.database.DocumentDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
+import com.hongstudio.kakaosearchimage.model.Document
 import kotlin.concurrent.thread
 
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
