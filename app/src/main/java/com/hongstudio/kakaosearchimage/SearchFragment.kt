@@ -16,6 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import kotlin.concurrent.thread
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
@@ -71,9 +72,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     response: Response<GetSearchedImagesResponse>
                 ) {
                     val dataset = response.body()!!.documents
-                    adapter = ImagesAdapter(dataset, ::onClickFavorite)
-                    binding.recyclerViewImageList.layoutManager = LinearLayoutManager(context)
-                    binding.recyclerViewImageList.adapter = adapter
+                    thread {
+                        val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
+                        val favorites = dao.getAll()
+
+                        dataset.forEach { document ->
+                            if (favorites.any { it.thumbnailUrl == document.thumbnailUrl }) {
+                                document.isFavorite = true
+                            }
+                        }
+
+                        activity?.runOnUiThread {
+                            adapter = ImagesAdapter(dataset, ::onClickFavorite)
+                            binding.recyclerViewImageList.layoutManager = LinearLayoutManager(context)
+                            binding.recyclerViewImageList.adapter = adapter
+                        }
+                    }
                 }
 
                 override fun onFailure(
@@ -89,6 +103,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun onClickFavorite(data: Document, position: Int) {
         data.isFavorite = !data.isFavorite
         adapter.notifyItemChanged(position)
+
+        thread {
+            val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
+            if (data.isFavorite) {
+                dao.insert(data)
+            } else {
+                dao.delete(data)
+            }
+        }
     }
 
     override fun onDestroyView() {
