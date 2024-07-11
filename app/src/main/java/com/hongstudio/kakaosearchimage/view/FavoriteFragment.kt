@@ -12,12 +12,11 @@ import kotlin.concurrent.thread
 
 class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
-    private var _binding: FragmentFavoriteBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentFavoriteBinding? = null
     private lateinit var adapter: ImagesAdapter
 
     override fun bindView(view: View) {
-        _binding = FragmentFavoriteBinding.bind(view)
+        binding = FragmentFavoriteBinding.bind(view)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,8 +28,8 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
             adapter = ImagesAdapter(dataset, ::onClickFavorite)
             activity?.runOnUiThread {
-                binding.recyclerViewImageList.layoutManager = LinearLayoutManager(context)
-                binding.recyclerViewImageList.adapter = adapter
+                binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
+                binding?.recyclerViewImageList?.adapter = adapter
             }
         }
     }
@@ -51,6 +50,6 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

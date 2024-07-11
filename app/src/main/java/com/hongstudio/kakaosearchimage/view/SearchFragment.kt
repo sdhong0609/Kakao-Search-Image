@@ -24,20 +24,19 @@ import kotlin.concurrent.thread
 
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentSearchBinding? = null
 
     private val json = Json { ignoreUnknownKeys = true }
     private lateinit var adapter: ImagesAdapter
 
     override fun bindView(view: View) {
-        _binding = FragmentSearchBinding.bind(view)
+        binding = FragmentSearchBinding.bind(view)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
+        binding?.editTextSearch?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 onClickSearch()
                 return@setOnEditorActionListener true
@@ -45,13 +44,13 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             false
         }
 
-        binding.imageButtonSearch.setOnClickListener {
+        binding?.imageButtonSearch?.setOnClickListener {
             onClickSearch()
         }
     }
 
     private fun onClickSearch() {
-        val keyword = binding.editTextSearch.text.toString()
+        val keyword = binding?.editTextSearch?.text.toString()
         if (keyword.isNotBlank()) {
             getSearchedImages(keyword)
         }
@@ -82,9 +81,9 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
                         activity?.runOnUiThread {
                             adapter = ImagesAdapter(dataset, ::onClickFavorite)
-                            binding.recyclerViewImageList.layoutManager =
+                            binding?.recyclerViewImageList?.layoutManager =
                                 LinearLayoutManager(context)
-                            binding.recyclerViewImageList.adapter = adapter
+                            binding?.recyclerViewImageList?.adapter = adapter
                         }
                     }
                 }
@@ -115,6 +114,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }
