@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
+import com.hongstudio.kakaosearchimage.common.DefaultJson
 import com.hongstudio.kakaosearchimage.database.DocumentDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
 import com.hongstudio.kakaosearchimage.model.Document
 import com.hongstudio.kakaosearchimage.model.GetSearchedImagesResponse
 import com.hongstudio.kakaosearchimage.service.SearchImageService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private var binding: FragmentSearchBinding? = null
 
-    private val json = Json { ignoreUnknownKeys = true }
     private lateinit var adapter: ImagesAdapter
 
     override fun bindView(view: View) {
@@ -59,7 +58,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     private fun getSearchedImages(keyword: String) {
         val contentType = "application/json".toMediaType()
         val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(json.asConverterFactory(contentType))
+            .addConverterFactory(DefaultJson.asConverterFactory(contentType))
             .build()
         val service = retrofit.create(SearchImageService::class.java)
         service.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
