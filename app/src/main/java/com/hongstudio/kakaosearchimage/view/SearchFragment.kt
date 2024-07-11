@@ -36,28 +36,23 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
         binding?.editTextSearch?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                onClickSearch()
+                getSearchedImages(binding?.editTextSearch?.text.toString())
                 return@setOnEditorActionListener true
             }
             false
         }
 
         binding?.imageButtonSearch?.setOnClickListener {
-            onClickSearch()
+            getSearchedImages(binding?.editTextSearch?.text.toString())
         }
 
         binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
         binding?.recyclerViewImageList?.adapter = adapter
     }
 
-    private fun onClickSearch() {
-        val keyword = binding?.editTextSearch?.text.toString()
-        if (keyword.isNotBlank()) {
-            getSearchedImages(keyword)
-        }
-    }
-
     private fun getSearchedImages(keyword: String) {
+        if (keyword.isBlank()) return
+
         val contentType = "application/json".toMediaType()
         val retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(DefaultJson.asConverterFactory(contentType))
