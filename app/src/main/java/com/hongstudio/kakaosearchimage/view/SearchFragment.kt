@@ -25,8 +25,7 @@ import kotlin.concurrent.thread
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private var binding: FragmentSearchBinding? = null
-
-    private lateinit var adapter: ImagesAdapter
+    private val adapter = ImagesAdapter(::onClickFavorite)
 
     override fun bindView(view: View) {
         binding = FragmentSearchBinding.bind(view)
@@ -46,6 +45,9 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         binding?.imageButtonSearch?.setOnClickListener {
             onClickSearch()
         }
+
+        binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
+        binding?.recyclerViewImageList?.adapter = adapter
     }
 
     private fun onClickSearch() {
@@ -79,10 +81,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                         }
 
                         activity?.runOnUiThread {
-                            adapter = ImagesAdapter(dataset, ::onClickFavorite)
-                            binding?.recyclerViewImageList?.layoutManager =
-                                LinearLayoutManager(context)
-                            binding?.recyclerViewImageList?.adapter = adapter
+                            adapter.setData(dataset)
                         }
                     }
                 }

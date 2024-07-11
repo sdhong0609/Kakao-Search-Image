@@ -13,7 +13,7 @@ import kotlin.concurrent.thread
 class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
     private var binding: FragmentFavoriteBinding? = null
-    private lateinit var adapter: ImagesAdapter
+    private val adapter = ImagesAdapter(::onClickFavorite)
 
     override fun bindView(view: View) {
         binding = FragmentFavoriteBinding.bind(view)
@@ -22,14 +22,15 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
+        binding?.recyclerViewImageList?.adapter = adapter
+
         thread {
             val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
             val dataset = dao.getAll()
 
-            adapter = ImagesAdapter(dataset, ::onClickFavorite)
             activity?.runOnUiThread {
-                binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
-                binding?.recyclerViewImageList?.adapter = adapter
+                adapter.setData(dataset)
             }
         }
     }
