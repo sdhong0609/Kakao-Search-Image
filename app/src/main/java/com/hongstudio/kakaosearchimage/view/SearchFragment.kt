@@ -1,15 +1,13 @@
 package com.hongstudio.kakaosearchimage.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.kakaosearchimage.R
+import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.database.DocumentDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
 import com.hongstudio.kakaosearchimage.model.Document
@@ -24,7 +22,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import kotlin.concurrent.thread
 
-class SearchFragment : Fragment(R.layout.fragment_search) {
+class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -32,13 +30,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val json = Json { ignoreUnknownKeys = true }
     private lateinit var adapter: ImagesAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun bindView(view: View) {
+        _binding = FragmentSearchBinding.bind(view)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
