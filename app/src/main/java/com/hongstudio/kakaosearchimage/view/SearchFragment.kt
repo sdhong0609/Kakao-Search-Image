@@ -55,7 +55,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                     call: Call<GetSearchedImagesResponse>,
                     response: Response<GetSearchedImagesResponse>
                 ) {
-                    val dataset = response.body()!!.documents
+                    val dataset = response.body()?.documents ?: emptyList()
                     thread {
                         val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
                         val favorites = dao.getAll()
