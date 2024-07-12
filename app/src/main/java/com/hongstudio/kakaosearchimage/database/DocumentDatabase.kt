@@ -11,7 +11,19 @@ abstract class DocumentDatabase : RoomDatabase() {
     abstract fun documentDao(): DocumentDao
 
     companion object {
-        fun getDatabase(context: Context): DocumentDatabase =
-            Room.databaseBuilder(context, DocumentDatabase::class.java, "document-database").build()
+        @Volatile
+        private var INSTANCE: DocumentDatabase? = null
+
+        fun getDatabase(context: Context): DocumentDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    DocumentDatabase::class.java,
+                    "document-database"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
+        }
     }
 }
