@@ -99,7 +99,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         binding = null
+        super.onDestroyView()
     }
 }

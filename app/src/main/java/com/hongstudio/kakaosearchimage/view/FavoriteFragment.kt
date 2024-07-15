@@ -50,7 +50,7 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         binding = null
+        super.onDestroyView()
     }
 }
