@@ -28,4 +28,11 @@ class ImagesAdapter(
         this.dataSet = dataSet
         notifyDataSetChanged()
     }
+
+    fun setUpdatedDocument(document: Document, position: Int) {
+        dataSet = dataSet.toMutableList().apply {
+            set(position, document)
+        }.toList()
+        notifyItemChanged(position)
+    }
 }

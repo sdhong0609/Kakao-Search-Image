@@ -35,16 +35,16 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
         }
     }
 
-    private fun onClickFavorite(data: Document, position: Int) {
-        data.isFavorite = !data.isFavorite
-        adapter.notifyItemChanged(position)
+    private fun onClickFavorite(document: Document, position: Int) {
+        val updatedDocument = document.copy(isFavorite = !document.isFavorite)
+        adapter.setUpdatedDocument(updatedDocument, position)
 
         thread {
             val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
-            if (data.isFavorite) {
-                dao.insert(data)
+            if (updatedDocument.isFavorite) {
+                dao.insert(updatedDocument)
             } else {
-                dao.delete(data)
+                dao.delete(updatedDocument)
             }
         }
     }

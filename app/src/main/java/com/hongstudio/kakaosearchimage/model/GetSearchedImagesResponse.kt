@@ -31,5 +31,5 @@ data class Document(
     @ColumnInfo("display_sitename")
     val displaySitename: String,
     @Transient
-    var isFavorite: Boolean = false
+    val isFavorite: Boolean = false
 )
