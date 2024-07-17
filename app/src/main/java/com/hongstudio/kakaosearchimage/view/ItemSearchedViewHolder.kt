@@ -11,12 +11,12 @@ class ItemSearchedViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(data: Document) {
-        Glide.with(binding.imageViewThumbnail.context)
+        Glide.with(binding.imageViewThumbnail)
             .load(data.thumbnailUrl)
             .into(binding.imageViewThumbnail)
         binding.textViewSiteName.text = data.displaySitename
         if (data.isFavorite) {
-            Glide.with(binding.imageViewFavorite.context)
+            Glide.with(binding.imageViewFavorite)
                 .load(android.R.drawable.btn_star_big_on)
                 .into(binding.imageViewFavorite)
         }
