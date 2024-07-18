@@ -12,6 +12,10 @@ import kotlin.concurrent.thread
 
 class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
+    companion object {
+        const val TAG = "FavoriteFragment"
+    }
+
     private var binding: FragmentFavoriteBinding? = null
     private val adapter = ImagesAdapter(::onClickFavorite)
 

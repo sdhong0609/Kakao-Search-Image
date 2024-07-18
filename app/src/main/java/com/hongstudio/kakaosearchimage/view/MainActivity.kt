@@ -24,24 +24,27 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val searchFragment = SearchFragment()
-        val favoriteFragment = FavoriteFragment()
+        val searchFragment =
+            supportFragmentManager.findFragmentByTag(SearchFragment.TAG) ?: SearchFragment()
+        val favoriteFragment =
+            supportFragmentManager.findFragmentByTag(FavoriteFragment.TAG) ?: FavoriteFragment()
 
-        setCurrentFragment(searchFragment)
+        if (supportFragmentManager.fragments.isEmpty()) {
+            setCurrentFragment(searchFragment, SearchFragment.TAG)
+        }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.pageSearch -> setCurrentFragment(searchFragment)
-                R.id.pageFavorite -> setCurrentFragment(favoriteFragment)
+                R.id.pageSearch -> setCurrentFragment(searchFragment, SearchFragment.TAG)
+                R.id.pageFavorite -> setCurrentFragment(favoriteFragment, FavoriteFragment.TAG)
             }
             true
         }
     }
 
-    private fun setCurrentFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentContainer, fragment)
-            commit()
-        }
+    private fun setCurrentFragment(fragment: Fragment, tag: String) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment, tag)
+            .commit()
     }
 }

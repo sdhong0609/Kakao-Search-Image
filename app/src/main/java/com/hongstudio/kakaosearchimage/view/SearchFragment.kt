@@ -20,6 +20,10 @@ import kotlin.concurrent.thread
 
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
+    companion object {
+        const val TAG = "SearchFragment"
+    }
+
     private var binding: FragmentSearchBinding? = null
     private val adapter = ImagesAdapter(::onClickFavorite)
 
