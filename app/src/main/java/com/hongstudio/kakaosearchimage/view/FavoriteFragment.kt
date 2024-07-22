@@ -12,12 +12,8 @@ import kotlin.concurrent.thread
 
 class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
-    companion object {
-        const val TAG = "FavoriteFragment"
-    }
-
     private var binding: FragmentFavoriteBinding? = null
-    private val adapter = ImagesAdapter(::onClickFavorite)
+    private val adapter = ImagesAdapter(::deleteFavorite)
 
     override fun bindView(view: View) {
         binding = FragmentFavoriteBinding.bind(view)
@@ -29,6 +25,10 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
         binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
         binding?.recyclerViewImageList?.adapter = adapter
 
+        setData()
+    }
+
+    override fun setData() {
         thread {
             val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
             val dataset = dao.getAll()
@@ -39,16 +39,14 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
         }
     }
 
-    private fun onClickFavorite(document: Document, position: Int) {
-        val updatedDocument = document.copy(isFavorite = !document.isFavorite)
-        adapter.setUpdatedDocument(updatedDocument, position)
-
+    private fun deleteFavorite(document: Document, position: Int) {
         thread {
             val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
-            if (updatedDocument.isFavorite) {
-                dao.insert(updatedDocument)
-            } else {
-                dao.delete(updatedDocument)
+            dao.delete(document)
+            val dataset = dao.getAll()
+
+            activity?.runOnUiThread {
+                adapter.setData(dataset)
             }
         }
     }

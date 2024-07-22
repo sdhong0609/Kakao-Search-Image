@@ -20,12 +20,9 @@ import kotlin.concurrent.thread
 
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
-    companion object {
-        const val TAG = "SearchFragment"
-    }
-
     private var binding: FragmentSearchBinding? = null
     private val adapter = ImagesAdapter(::onClickFavorite)
+    private var dataset: List<Document> = emptyList()
 
     override fun bindView(view: View) {
         binding = FragmentSearchBinding.bind(view)
@@ -59,23 +56,8 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                     call: Call<GetSearchedImagesResponse>,
                     response: Response<GetSearchedImagesResponse>
                 ) {
-                    val dataset = response.body()?.documents ?: emptyList()
-                    thread {
-                        val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
-                        val favorites = dao.getAll()
-
-                        val updatedDataset = dataset.map { document ->
-                            if (favorites.any { it.thumbnailUrl == document.thumbnailUrl }) {
-                                document.copy(isFavorite = true)
-                            } else {
-                                document
-                            }
-                        }
-
-                        activity?.runOnUiThread {
-                            adapter.setData(updatedDataset)
-                        }
-                    }
+                    dataset = response.body()?.documents ?: emptyList()
+                    setData()
                 }
 
                 override fun onFailure(
@@ -88,9 +70,27 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             })
     }
 
+    override fun setData() {
+        thread {
+            val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
+            val favorites = dao.getAll()
+
+            val updatedDataset = dataset.map { document ->
+                if (favorites.any { it.thumbnailUrl == document.thumbnailUrl }) {
+                    document.copy(isFavorite = true)
+                } else {
+                    document
+                }
+            }
+
+            activity?.runOnUiThread {
+                adapter.setData(updatedDataset)
+            }
+        }
+    }
+
     private fun onClickFavorite(document: Document, position: Int) {
         val updatedDocument = document.copy(isFavorite = !document.isFavorite)
-        adapter.setUpdatedDocument(updatedDocument, position)
 
         thread {
             val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
@@ -98,6 +98,10 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 dao.insert(updatedDocument)
             } else {
                 dao.delete(updatedDocument)
+            }
+
+            activity?.runOnUiThread {
+                adapter.setUpdatedDocument(updatedDocument, position)
             }
         }
     }

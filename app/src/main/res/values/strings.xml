@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Kakao Search Image</string>
-    <string name="bottom_navigation_label_search">검색</string>
-    <string name="bottom_navigation_label_favorite">즐겨찾기</string>
+    <string name="page_search_title">검색</string>
+    <string name="page_favorite_title">즐겨찾기</string>
 </resources>

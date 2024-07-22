@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 
 abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
     abstract fun bindView(view: View)
+    abstract fun setData()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
