@@ -14,12 +14,17 @@ class ItemSearchedViewHolder(
         Glide.with(binding.imageViewThumbnail)
             .load(data.thumbnailUrl)
             .into(binding.imageViewThumbnail)
+
         binding.textViewSiteName.text = data.displaySitename
-        if (data.isFavorite) {
-            Glide.with(binding.imageViewFavorite)
-                .load(android.R.drawable.btn_star_big_on)
-                .into(binding.imageViewFavorite)
+
+        val starDrawable = if (data.isFavorite) {
+            android.R.drawable.btn_star_big_on
+        } else {
+            android.R.drawable.btn_star_big_off
         }
+        Glide.with(binding.imageViewFavorite)
+            .load(starDrawable)
+            .into(binding.imageViewFavorite)
 
         binding.imageViewFavorite.setOnClickListener {
             onClickFavorite(data, adapterPosition)
