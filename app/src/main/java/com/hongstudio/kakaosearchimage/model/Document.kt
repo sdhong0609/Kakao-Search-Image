@@ -1,21 +1,46 @@
 package com.hongstudio.kakaosearchimage.model
 
-import androidx.room.ColumnInfo
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.datetime.Instant
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-@Entity
 data class Document(
     @SerialName("thumbnail_url")
-    @PrimaryKey
     val thumbnailUrl: String,
+    @SerialName("image_url")
+    val imageUrl: String,
     @SerialName("display_sitename")
-    @ColumnInfo("display_sitename")
     val displaySitename: String,
-    @Transient
-    val isFavorite: Boolean = false
-)
+    @SerialName("doc_url")
+    val docUrl: String,
+    @SerialName("datetime")
+    val datetime: Instant,
+) {
+    fun toEntity(): DocumentEntity {
+        return DocumentEntity(
+            thumbnailUrl = thumbnailUrl,
+            imageUrl = imageUrl,
+            displaySitename = displaySitename,
+            docUrl = docUrl,
+            datetimeString = datetime.toString(),
+            isFavorite = false
+        )
+    }
+
+    @Parcelize
+    @Entity
+    data class DocumentEntity(
+        @PrimaryKey
+        val thumbnailUrl: String = "",
+        val imageUrl: String = "",
+        val displaySitename: String = "",
+        val docUrl: String = "",
+        val datetimeString: String = "",
+        val isFavorite: Boolean = false
+    ) : Parcelable
+}

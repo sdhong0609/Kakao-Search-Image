@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
-import com.hongstudio.kakaosearchimage.database.DocumentDatabase
+import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
-import com.hongstudio.kakaosearchimage.model.Document
+import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import com.hongstudio.kakaosearchimage.model.GetSearchedImagesResponse
 import com.hongstudio.kakaosearchimage.service.RetrofitObject
 import retrofit2.Call
@@ -21,8 +21,8 @@ import kotlin.concurrent.thread
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private var binding: FragmentSearchBinding? = null
-    private val adapter = ImagesAdapter(::onClickFavorite)
-    private var dataset: List<Document> = emptyList()
+    private val adapter = ImagesAdapter(::onClickFavorite, ::onClickItem)
+    private var dataset: List<DocumentEntity> = emptyList()
 
     override fun bindView(view: View) {
         binding = FragmentSearchBinding.bind(view)
@@ -56,7 +56,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                     call: Call<GetSearchedImagesResponse>,
                     response: Response<GetSearchedImagesResponse>
                 ) {
-                    dataset = response.body()?.documents ?: emptyList()
+                    dataset = response.body()?.documents?.map { it.toEntity() } ?: emptyList()
                     setData()
                 }
 
@@ -72,14 +72,14 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     override fun setData() {
         thread {
-            val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
+            val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             val favorites = dao.getAll()
 
-            val updatedDataset = dataset.map { document ->
-                if (favorites.any { it.thumbnailUrl == document.thumbnailUrl }) {
-                    document.copy(isFavorite = true)
+            val updatedDataset = dataset.map { documentEntity ->
+                if (favorites.any { it.thumbnailUrl == documentEntity.thumbnailUrl }) {
+                    documentEntity.copy(isFavorite = true)
                 } else {
-                    document
+                    documentEntity
                 }
             }
 
@@ -89,21 +89,25 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         }
     }
 
-    private fun onClickFavorite(document: Document, position: Int) {
-        val updatedDocument = document.copy(isFavorite = !document.isFavorite)
+    private fun onClickFavorite(documentEntity: DocumentEntity, position: Int) {
+        val updatedDocumentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
 
         thread {
-            val dao = DocumentDatabase.getDatabase(requireContext()).documentDao()
-            if (updatedDocument.isFavorite) {
-                dao.insert(updatedDocument)
+            val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
+            if (updatedDocumentEntity.isFavorite) {
+                dao.insert(updatedDocumentEntity)
             } else {
-                dao.delete(updatedDocument)
+                dao.delete(updatedDocumentEntity)
             }
 
             activity?.runOnUiThread {
-                adapter.setUpdatedDocument(updatedDocument, position)
+                adapter.setUpdatedDocument(updatedDocumentEntity, position)
             }
         }
+    }
+
+    private fun onClickItem(documentEntity: DocumentEntity) {
+        launcher.launch(ImageDetailActivity.newIntent(requireContext(), documentEntity))
     }
 
     override fun onDestroyView() {
