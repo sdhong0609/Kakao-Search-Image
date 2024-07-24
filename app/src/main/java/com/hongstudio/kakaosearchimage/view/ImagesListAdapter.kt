@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
-class ImagesAdapter(
+class ImagesListAdapter(
     private val onClickFavorite: (data: DocumentEntity, position: Int) -> Unit,
     private val onClickItem: (data: DocumentEntity) -> Unit,
 ) : ListAdapter<DocumentEntity, ItemSearchedViewHolder>(diffCallback) {

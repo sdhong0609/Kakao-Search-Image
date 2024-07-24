@@ -21,7 +21,7 @@ import kotlin.concurrent.thread
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private var binding: FragmentSearchBinding? = null
-    private val adapter = ImagesAdapter(::onClickFavorite, ::onClickItem)
+    private val adapter = ImagesListAdapter(::onClickFavorite, ::onClickItem)
     private var dataset: List<DocumentEntity> = emptyList()
 
     override fun bindView(view: View) {

@@ -13,7 +13,7 @@ import kotlin.concurrent.thread
 class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
     private var binding: FragmentFavoriteBinding? = null
-    private val adapter = ImagesAdapter(::deleteFavorite, ::onClickItem)
+    private val adapter = ImagesListAdapter(::deleteFavorite, ::onClickItem)
 
     override fun bindView(view: View) {
         binding = FragmentFavoriteBinding.bind(view)
