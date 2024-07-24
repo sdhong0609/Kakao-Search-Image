@@ -9,11 +9,11 @@ import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 @Dao
 interface FavoriteDao {
     @Query("SELECT * FROM documententity")
-    fun getAll(): List<DocumentEntity>
+    suspend fun getAll(): List<DocumentEntity>
 
     @Insert
-    fun insert(documentEntity: DocumentEntity)
+    suspend fun insert(documentEntity: DocumentEntity)
 
     @Delete
-    fun delete(documentEntity: DocumentEntity)
+    suspend fun delete(documentEntity: DocumentEntity)
 }

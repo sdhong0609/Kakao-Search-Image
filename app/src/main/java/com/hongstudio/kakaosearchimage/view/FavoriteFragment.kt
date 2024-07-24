@@ -8,7 +8,7 @@ import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
-import kotlin.concurrent.thread
+import kotlinx.coroutines.launch
 
 class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
@@ -29,25 +29,21 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
     }
 
     override fun setData() {
-        thread {
+        uiScope.launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             val favorites = dao.getAll()
 
-            activity?.runOnUiThread {
-                adapter.setData(favorites)
-            }
+            adapter.setData(favorites)
         }
     }
 
     private fun deleteFavorite(documentEntity: DocumentEntity, position: Int) {
-        thread {
+        uiScope.launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             dao.delete(documentEntity)
             val dataset = dao.getAll()
 
-            activity?.runOnUiThread {
-                adapter.setData(dataset)
-            }
+            adapter.setData(dataset)
         }
     }
 

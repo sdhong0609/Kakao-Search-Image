@@ -10,10 +10,10 @@ import com.hongstudio.kakaosearchimage.base.BaseActivity
 import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlin.concurrent.thread
 
 class ImageDetailActivity : BaseActivity() {
 
@@ -75,8 +75,8 @@ class ImageDetailActivity : BaseActivity() {
     }
 
     private fun onClickFavorite() {
-        thread {
-            val dao = FavoriteDatabase.getDatabase(this).documentDao()
+        uiScope.launch {
+            val dao = FavoriteDatabase.getDatabase(this@ImageDetailActivity).documentDao()
             documentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
             if (documentEntity.isFavorite) {
                 dao.insert(documentEntity)
@@ -84,9 +84,7 @@ class ImageDetailActivity : BaseActivity() {
                 dao.delete(documentEntity)
             }
 
-            runOnUiThread {
-                setImageViewFavorite(documentEntity.isFavorite)
-            }
+            setImageViewFavorite(documentEntity.isFavorite)
         }
     }
 
