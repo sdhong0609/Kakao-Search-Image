@@ -22,6 +22,7 @@ class ImageDetailActivity : BaseActivity() {
 
     companion object {
         private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
+        private const val BUNDLE_IS_FAVORITE_KEY = "isFavorite"
 
         fun newIntent(context: Context, documentEntity: DocumentEntity): Intent {
             return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, documentEntity)
@@ -33,16 +34,21 @@ class ImageDetailActivity : BaseActivity() {
         binding = ActivityImageDetailBinding.inflate(layoutInflater)
         setContentView(binding)
 
-        setUpView()
-    }
-
-    private fun setUpView() {
         documentEntity = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(IMAGE_DETAIL_EXTRA, DocumentEntity::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra(IMAGE_DETAIL_EXTRA)
         } ?: DocumentEntity()
+
+        savedInstanceState?.getBoolean(BUNDLE_IS_FAVORITE_KEY)?.let {
+            documentEntity = documentEntity.copy(isFavorite = it)
+        }
+
+        setUpView()
+    }
+
+    private fun setUpView() {
 
         binding.imageViewDetail.load(documentEntity.imageUrl) {
             error(android.R.drawable.ic_delete)
@@ -64,20 +70,23 @@ class ImageDetailActivity : BaseActivity() {
         )
 
         binding.imageViewFavorite.setOnClickListener {
-            thread {
-                val dao = FavoriteDatabase.getDatabase(this).documentDao()
-                documentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
-                if (documentEntity.isFavorite) {
-                    dao.insert(documentEntity)
-                } else {
-                    dao.delete(documentEntity)
-                }
+            onClickFavorite()
+        }
+    }
 
-                runOnUiThread {
-                    setImageViewFavorite(documentEntity.isFavorite)
-                }
+    private fun onClickFavorite() {
+        thread {
+            val dao = FavoriteDatabase.getDatabase(this).documentDao()
+            documentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
+            if (documentEntity.isFavorite) {
+                dao.insert(documentEntity)
+            } else {
+                dao.delete(documentEntity)
             }
 
+            runOnUiThread {
+                setImageViewFavorite(documentEntity.isFavorite)
+            }
         }
     }
 
@@ -88,5 +97,10 @@ class ImageDetailActivity : BaseActivity() {
             android.R.drawable.btn_star_big_off
         }
         binding.imageViewFavorite.load(starDrawable)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(BUNDLE_IS_FAVORITE_KEY, documentEntity.isFavorite)
     }
 }
