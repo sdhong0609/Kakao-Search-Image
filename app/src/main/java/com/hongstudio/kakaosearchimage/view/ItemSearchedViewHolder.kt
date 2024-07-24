@@ -1,7 +1,7 @@
 package com.hongstudio.kakaosearchimage.view
 
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
@@ -12,10 +12,7 @@ class ItemSearchedViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(data: DocumentEntity) {
-        Glide.with(binding.imageViewThumbnail)
-            .load(data.thumbnailUrl)
-            .into(binding.imageViewThumbnail)
-
+        binding.imageViewThumbnail.load(data.thumbnailUrl)
         binding.textViewSiteName.text = data.displaySitename
 
         val starDrawable = if (data.isFavorite) {
@@ -23,9 +20,7 @@ class ItemSearchedViewHolder(
         } else {
             android.R.drawable.btn_star_big_off
         }
-        Glide.with(binding.imageViewFavorite)
-            .load(starDrawable)
-            .into(binding.imageViewFavorite)
+        binding.imageViewFavorite.load(starDrawable)
 
         binding.root.setOnClickListener {
             onClickItem(data)

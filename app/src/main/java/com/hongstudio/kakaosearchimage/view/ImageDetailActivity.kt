@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import com.bumptech.glide.Glide
+import coil.load
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
 import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
@@ -44,10 +44,9 @@ class ImageDetailActivity : BaseActivity() {
             intent.getParcelableExtra(IMAGE_DETAIL_EXTRA)
         } ?: DocumentEntity()
 
-        Glide.with(binding.imageViewDetail)
-            .load(documentEntity.imageUrl)
-            .error(android.R.drawable.ic_delete)
-            .into(binding.imageViewDetail)
+        binding.imageViewDetail.load(documentEntity.imageUrl) {
+            error(android.R.drawable.ic_delete)
+        }
 
         setImageViewFavorite(documentEntity.isFavorite)
 
@@ -88,8 +87,6 @@ class ImageDetailActivity : BaseActivity() {
         } else {
             android.R.drawable.btn_star_big_off
         }
-        Glide.with(binding.imageViewFavorite)
-            .load(starDrawable)
-            .into(binding.imageViewFavorite)
+        binding.imageViewFavorite.load(starDrawable)
     }
 }
