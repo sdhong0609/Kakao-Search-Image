@@ -13,15 +13,13 @@ import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import com.hongstudio.kakaosearchimage.service.RetrofitObject
 import kotlinx.coroutines.launch
 
-class SearchFragment : BaseFragment(R.layout.fragment_search) {
+class SearchFragment : BaseFragment<FragmentSearchBinding>(
+    layoutId = R.layout.fragment_search,
+    binder = FragmentSearchBinding::bind
+) {
 
-    private var binding: FragmentSearchBinding? = null
     private val adapter = ImagesListAdapter(::onClickFavorite, ::onClickItem)
     private var dataset: List<DocumentEntity> = emptyList()
-
-    override fun bindView(view: View) {
-        binding = FragmentSearchBinding.bind(view)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,10 +84,5 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private fun onClickItem(documentEntity: DocumentEntity) {
         launcher.launch(ImageDetailActivity.newIntent(requireContext(), documentEntity))
-    }
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
     }
 }

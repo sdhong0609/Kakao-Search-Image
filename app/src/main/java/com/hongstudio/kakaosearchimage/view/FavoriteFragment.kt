@@ -10,14 +10,12 @@ import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import kotlinx.coroutines.launch
 
-class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
+class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
+    layoutId = R.layout.fragment_favorite,
+    binder = FragmentFavoriteBinding::bind
+) {
 
-    private var binding: FragmentFavoriteBinding? = null
     private val adapter = ImagesListAdapter(::deleteFavorite, ::onClickItem)
-
-    override fun bindView(view: View) {
-        binding = FragmentFavoriteBinding.bind(view)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,10 +47,5 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
 
     private fun onClickItem(documentEntity: DocumentEntity) {
         launcher.launch(ImageDetailActivity.newIntent(requireContext(), documentEntity))
-    }
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
     }
 }
