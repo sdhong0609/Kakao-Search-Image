@@ -29,7 +29,7 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
     }
 
     override fun setData() {
-        uiScope.launch {
+        launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             val favorites = dao.getAll()
 
@@ -38,7 +38,7 @@ class FavoriteFragment : BaseFragment(R.layout.fragment_favorite) {
     }
 
     private fun deleteFavorite(documentEntity: DocumentEntity, position: Int) {
-        uiScope.launch {
+        launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             dao.delete(documentEntity)
             val dataset = dao.getAll()

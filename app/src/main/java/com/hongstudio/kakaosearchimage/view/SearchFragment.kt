@@ -45,7 +45,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     private fun getSearchedImages(keyword: String) {
         if (keyword.isBlank()) return
 
-        uiScope.launch {
+        launch {
             val response = RetrofitObject.searchImageService.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
             dataset = response.documents.map { it.toEntity() }
             setData()
@@ -53,7 +53,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     override fun setData() {
-        uiScope.launch {
+        launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             val favorites = dao.getAll()
 
@@ -72,7 +72,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     private fun onClickFavorite(documentEntity: DocumentEntity, position: Int) {
         val updatedDocumentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
 
-        uiScope.launch {
+        launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             if (updatedDocumentEntity.isFavorite) {
                 dao.insert(updatedDocumentEntity)

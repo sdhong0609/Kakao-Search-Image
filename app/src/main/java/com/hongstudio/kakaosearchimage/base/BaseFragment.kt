@@ -8,16 +8,18 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.CoroutineScope
+import kotlin.coroutines.CoroutineContext
 
-abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
+abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext =
+        viewLifecycleOwner.lifecycleScope.coroutineContext + CoroutineExceptionHandler { _, _ ->
+            Toast.makeText(context, "에러 발생", Toast.LENGTH_SHORT).show()
+        }
 
     protected val launcher = registerForActivityResult(StartActivityForResult()) {
         setData()
-    }
-
-    protected val uiScope = lifecycleScope + CoroutineExceptionHandler { _, _ ->
-        Toast.makeText(context, "에러 발생", Toast.LENGTH_SHORT).show()
     }
 
     abstract fun bindView(view: View)
