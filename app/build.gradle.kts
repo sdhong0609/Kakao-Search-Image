@@ -1,11 +1,24 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
     namespace = "com.hongstudio.kakaosearchimage"
     compileSdk = 34
+
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+
+    val properties = Properties()
+    properties.load(project.rootProject.file("key.properties").inputStream())
 
     defaultConfig {
         applicationId = "com.hongstudio.kakaosearchimage"
@@ -15,6 +28,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+        buildConfigField("String", "REST_API_KEY", "\"${properties.getProperty("REST_API_KEY")}\"")
     }
 
     buildTypes {
@@ -42,6 +58,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.timber)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.coil)
+    implementation(libs.androidx.room.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
