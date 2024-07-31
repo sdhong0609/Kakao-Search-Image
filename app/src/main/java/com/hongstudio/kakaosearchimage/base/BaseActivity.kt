@@ -1,5 +1,7 @@
 package com.hongstudio.kakaosearchimage.base
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,15 +10,27 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.CoroutineScope
+import kotlin.coroutines.CoroutineContext
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding>(
+    private val inflater: (LayoutInflater) -> VB
+) : AppCompatActivity(), CoroutineScope {
 
-    protected val uiScope = lifecycleScope + CoroutineExceptionHandler { _, _ ->
-        Toast.makeText(this, "에러 발생", Toast.LENGTH_SHORT).show()
+    protected lateinit var binding: VB
+
+    override val coroutineContext: CoroutineContext =
+        lifecycleScope.coroutineContext + CoroutineExceptionHandler { _, _ ->
+            Toast.makeText(this, "에러 발생", Toast.LENGTH_SHORT).show()
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = inflater(layoutInflater)
+        setContentView(binding)
     }
 
-    protected fun setContentView(binding: ViewBinding) {
+    private fun setContentView(binding: ViewBinding) {
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->

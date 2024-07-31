@@ -8,14 +8,12 @@ import com.hongstudio.kakaosearchimage.base.BaseActivity
 import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity() {
-
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : BaseActivity<ActivityMainBinding>(
+    inflater = ActivityMainBinding::inflate
+) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding)
 
         setUpView()
     }

@@ -15,9 +15,10 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-class ImageDetailActivity : BaseActivity() {
+class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
+    inflater = ActivityImageDetailBinding::inflate
+) {
 
-    private lateinit var binding: ActivityImageDetailBinding
     private var documentEntity = DocumentEntity()
 
     companion object {
@@ -31,8 +32,6 @@ class ImageDetailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityImageDetailBinding.inflate(layoutInflater)
-        setContentView(binding)
 
         documentEntity = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(IMAGE_DETAIL_EXTRA, DocumentEntity::class.java)
@@ -75,7 +74,7 @@ class ImageDetailActivity : BaseActivity() {
     }
 
     private fun onClickFavorite() {
-        uiScope.launch {
+        launch {
             val dao = FavoriteDatabase.getDatabase(this@ImageDetailActivity).documentDao()
             documentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
             if (documentEntity.isFavorite) {
