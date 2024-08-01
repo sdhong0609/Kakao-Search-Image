@@ -16,7 +16,10 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     binder = FragmentFavoriteBinding::bind
 ) {
 
-    private val adapter = ImagesListAdapter(::deleteFavorite, ::onClickItem)
+    private val adapter = ImagesListAdapter(
+        onClickFavorite = { documentEntity, _ -> deleteFavorite(documentEntity) },
+        onClickItem = ::onClickItem
+    )
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         setData()
     }
@@ -39,7 +42,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         }
     }
 
-    private fun deleteFavorite(documentEntity: DocumentEntity, position: Int) {
+    private fun deleteFavorite(documentEntity: DocumentEntity) {
         launch {
             val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
             dao.delete(documentEntity)

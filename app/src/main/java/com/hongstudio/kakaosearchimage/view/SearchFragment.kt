@@ -19,7 +19,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     binder = FragmentSearchBinding::bind
 ) {
 
-    private val adapter = ImagesListAdapter(::onClickFavorite, ::onClickItem)
+    private val adapter = ImagesListAdapter(
+        onClickFavorite = ::onClickFavorite,
+        onClickItem = ::onClickItem
+    )
     private var dataset: List<DocumentEntity> = emptyList()
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         setData()
