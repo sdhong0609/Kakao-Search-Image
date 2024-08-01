@@ -2,6 +2,7 @@ package com.hongstudio.kakaosearchimage.view
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
@@ -16,6 +17,9 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
 ) {
 
     private val adapter = ImagesListAdapter(::deleteFavorite, ::onClickItem)
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        setData()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

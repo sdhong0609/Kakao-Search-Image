@@ -3,6 +3,7 @@ package com.hongstudio.kakaosearchimage.view
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.kakaosearchimage.R
@@ -20,6 +21,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
 
     private val adapter = ImagesListAdapter(::onClickFavorite, ::onClickItem)
     private var dataset: List<DocumentEntity> = emptyList()
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        setData()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

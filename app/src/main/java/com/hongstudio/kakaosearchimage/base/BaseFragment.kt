@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -25,10 +24,6 @@ abstract class BaseFragment<VB : ViewBinding>(
         viewLifecycleOwner.lifecycleScope.coroutineContext + CoroutineExceptionHandler { _, _ ->
             Toast.makeText(context, "에러 발생", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    protected val launcher = registerForActivityResult(StartActivityForResult()) {
-        setData()
     }
 
     abstract fun setData()
