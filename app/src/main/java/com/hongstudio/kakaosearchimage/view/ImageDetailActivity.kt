@@ -21,15 +21,6 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
 
     private var documentEntity = DocumentEntity()
 
-    companion object {
-        private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
-        private const val BUNDLE_IS_FAVORITE_KEY = "isFavorite"
-
-        fun newIntent(context: Context, documentEntity: DocumentEntity): Intent {
-            return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, documentEntity)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -99,5 +90,14 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(BUNDLE_IS_FAVORITE_KEY, documentEntity.isFavorite)
+    }
+
+    companion object {
+        private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
+        private const val BUNDLE_IS_FAVORITE_KEY = "isFavorite"
+
+        fun newIntent(context: Context, documentEntity: DocumentEntity): Intent {
+            return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, documentEntity)
+        }
     }
 }

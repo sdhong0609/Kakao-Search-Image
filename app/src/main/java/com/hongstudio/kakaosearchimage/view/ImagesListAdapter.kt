@@ -10,7 +10,17 @@ import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 class ImagesListAdapter(
     private val onClickFavorite: (data: DocumentEntity, position: Int) -> Unit,
     private val onClickItem: (data: DocumentEntity) -> Unit,
-) : ListAdapter<DocumentEntity, ItemSearchedViewHolder>(diffCallback) {
+) : ListAdapter<DocumentEntity, ItemSearchedViewHolder>(
+    object : DiffUtil.ItemCallback<DocumentEntity>() {
+        override fun areItemsTheSame(oldDocument: DocumentEntity, newDocument: DocumentEntity): Boolean {
+            return oldDocument.thumbnailUrl == newDocument.thumbnailUrl
+        }
+
+        override fun areContentsTheSame(oldDocument: DocumentEntity, newDocument: DocumentEntity): Boolean {
+            return oldDocument == newDocument
+        }
+    }
+) {
 
     private var dataSet: List<DocumentEntity> = listOf()
 
@@ -26,20 +36,6 @@ class ImagesListAdapter(
 
     override fun getItemCount() = dataSet.size
 
-    companion object {
-        private val diffCallback: DiffUtil.ItemCallback<DocumentEntity> =
-            object : DiffUtil.ItemCallback<DocumentEntity>() {
-                override fun areItemsTheSame(oldDocument: DocumentEntity, newDocument: DocumentEntity): Boolean {
-                    return oldDocument.thumbnailUrl == newDocument.thumbnailUrl
-                }
-
-                override fun areContentsTheSame(oldDocument: DocumentEntity, newDocument: DocumentEntity): Boolean {
-                    return oldDocument == newDocument
-                }
-
-            }
-    }
-
     fun setData(dataSet: List<DocumentEntity>) {
         this.dataSet = dataSet
         submitList(dataSet)
@@ -51,4 +47,5 @@ class ImagesListAdapter(
         }
         submitList(dataSet)
     }
+
 }
