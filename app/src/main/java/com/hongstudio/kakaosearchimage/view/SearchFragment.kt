@@ -85,7 +85,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
                 dao.delete(updatedDocumentEntity)
             }
 
-            adapter.setUpdatedDocument(updatedDocumentEntity, position)
+            adapter.updateItem(updatedDocumentEntity, position)
         }
     }
 
