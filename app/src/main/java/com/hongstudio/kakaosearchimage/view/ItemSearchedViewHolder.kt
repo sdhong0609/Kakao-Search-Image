@@ -1,21 +1,21 @@
 package com.hongstudio.kakaosearchimage.view
 
-import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.hongstudio.kakaosearchimage.base.BaseViewHolder
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
 class ItemSearchedViewHolder(
     private val binding: ItemSearchedBinding,
-    private val onClickFavorite: (data: DocumentEntity, position: Int) -> Unit,
-    private val onClickItem: (data: DocumentEntity) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
+    private val onClickFavorite: (item: DocumentEntity, position: Int) -> Unit,
+    private val onClickItem: (item: DocumentEntity) -> Unit
+) : BaseViewHolder<DocumentEntity>(binding) {
 
-    fun bind(data: DocumentEntity) {
-        binding.imageViewThumbnail.load(data.thumbnailUrl)
-        binding.textViewSiteName.text = data.displaySitename
+    override fun bind(item: DocumentEntity) {
+        binding.imageViewThumbnail.load(item.thumbnailUrl)
+        binding.textViewSiteName.text = item.displaySitename
 
-        val starDrawable = if (data.isFavorite) {
+        val starDrawable = if (item.isFavorite) {
             android.R.drawable.btn_star_big_on
         } else {
             android.R.drawable.btn_star_big_off
@@ -23,10 +23,10 @@ class ItemSearchedViewHolder(
         binding.imageViewFavorite.load(starDrawable)
 
         binding.root.setOnClickListener {
-            onClickItem(data)
+            onClickItem(item)
         }
         binding.imageViewFavorite.setOnClickListener {
-            onClickFavorite(data, adapterPosition)
+            onClickFavorite(item, adapterPosition)
         }
     }
 }
