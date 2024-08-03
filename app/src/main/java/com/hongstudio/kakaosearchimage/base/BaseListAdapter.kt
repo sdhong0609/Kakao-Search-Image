@@ -19,11 +19,4 @@ abstract class BaseListAdapter<ITEM : Any>(
         this.items = items
         submitList(items)
     }
-
-    fun updateItem(item: ITEM, position: Int) {
-        items = items.toMutableList().apply {
-            set(position, item)
-        }
-        submitList(items)
-    }
 }

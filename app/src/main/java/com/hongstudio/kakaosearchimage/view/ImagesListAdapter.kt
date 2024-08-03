@@ -8,7 +8,7 @@ import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
 class ImagesListAdapter(
-    private val onClickFavorite: (item: DocumentEntity, position: Int) -> Unit,
+    private val onClickFavorite: (item: DocumentEntity) -> Unit,
     private val onClickItem: (item: DocumentEntity) -> Unit,
 ) : BaseListAdapter<DocumentEntity>(
     diffCallback = object : DiffUtil.ItemCallback<DocumentEntity>() {

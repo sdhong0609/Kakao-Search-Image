@@ -4,12 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import coil.load
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
-import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -18,86 +19,58 @@ import kotlinx.datetime.toLocalDateTime
 class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     inflater = ActivityImageDetailBinding::inflate
 ) {
-
-    private var documentEntity = DocumentEntity()
+    private val viewModel: ImageDetailViewModel by viewModels {
+        ImageDetailViewModelFactory(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(IMAGE_DETAIL_EXTRA, DocumentEntity::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra(IMAGE_DETAIL_EXTRA)
+            }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        documentEntity = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(IMAGE_DETAIL_EXTRA, DocumentEntity::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra(IMAGE_DETAIL_EXTRA)
-        } ?: DocumentEntity()
+        launch {
+            viewModel.detailItem.collectLatest { item ->
+                if (item == null) return@collectLatest run { finish() }
 
-        savedInstanceState?.getBoolean(BUNDLE_IS_FAVORITE_KEY)?.let {
-            documentEntity = documentEntity.copy(isFavorite = it)
+                binding.imageViewDetail.load(item.imageUrl) {
+                    error(android.R.drawable.ic_delete)
+                }
+
+                binding.textViewDetailSiteName.text = getString(R.string.activity_image_detail_sitename, item.displaySitename)
+                binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
+
+                val localDate = Instant.parse(item.datetimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
+                binding.textViewDateTime.text = getString(
+                    R.string.activity_image_detail_date,
+                    localDate.year,
+                    localDate.monthNumber,
+                    localDate.dayOfMonth
+                )
+
+                val starDrawable = if (item.isFavorite) {
+                    android.R.drawable.btn_star_big_on
+                } else {
+                    android.R.drawable.btn_star_big_off
+                }
+                binding.imageViewFavorite.load(starDrawable)
+            }
         }
-
-        setUpView()
-    }
-
-    private fun setUpView() {
-
-        binding.imageViewDetail.load(documentEntity.imageUrl) {
-            error(android.R.drawable.ic_delete)
-        }
-
-        setImageViewFavorite(documentEntity.isFavorite)
-
-        binding.textViewDetailSiteName.text =
-            getString(R.string.activity_image_detail_sitename, documentEntity.displaySitename)
-        binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, documentEntity.docUrl)
-
-        val localDate =
-            Instant.parse(documentEntity.datetimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
-        binding.textViewDateTime.text = getString(
-            R.string.activity_image_detail_date,
-            localDate.year,
-            localDate.monthNumber,
-            localDate.dayOfMonth
-        )
 
         binding.imageViewFavorite.setOnClickListener {
-            onClickFavorite()
+            viewModel.onClickFavorite()
         }
-    }
-
-    private fun onClickFavorite() {
-        launch {
-            val dao = FavoriteDatabase.getDatabase(this@ImageDetailActivity).documentDao()
-            documentEntity = documentEntity.copy(isFavorite = !documentEntity.isFavorite)
-            if (documentEntity.isFavorite) {
-                dao.insert(documentEntity)
-            } else {
-                dao.delete(documentEntity)
-            }
-
-            setImageViewFavorite(documentEntity.isFavorite)
-        }
-    }
-
-    private fun setImageViewFavorite(isFavorite: Boolean) {
-        val starDrawable = if (isFavorite) {
-            android.R.drawable.btn_star_big_on
-        } else {
-            android.R.drawable.btn_star_big_off
-        }
-        binding.imageViewFavorite.load(starDrawable)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(BUNDLE_IS_FAVORITE_KEY, documentEntity.isFavorite)
     }
 
     companion object {
         private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
-        private const val BUNDLE_IS_FAVORITE_KEY = "isFavorite"
 
-        fun newIntent(context: Context, documentEntity: DocumentEntity): Intent {
-            return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, documentEntity)
+        fun newIntent(context: Context, item: DocumentEntity): Intent {
+            return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
         }
     }
 }

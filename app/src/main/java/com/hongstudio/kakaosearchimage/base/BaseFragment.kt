@@ -26,8 +26,6 @@ abstract class BaseFragment<VB : ViewBinding>(
         }
     }
 
-    abstract fun setData()
-
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

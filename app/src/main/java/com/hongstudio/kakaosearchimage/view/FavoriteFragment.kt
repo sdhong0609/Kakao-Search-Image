@@ -2,27 +2,25 @@ package com.hongstudio.kakaosearchimage.view
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
-import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
 import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     layoutId = R.layout.fragment_favorite,
     binder = FragmentFavoriteBinding::bind
 ) {
+    private val viewModel: FavoriteViewModel by viewModels { FavoriteViewModel.Factory }
 
     private val adapter = ImagesListAdapter(
-        onClickFavorite = { documentEntity, _ -> deleteFavorite(documentEntity) },
+        onClickFavorite = ::deleteFavorite,
         onClickItem = ::onClickItem
     )
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        setData()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,29 +28,18 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
         binding?.recyclerViewImageList?.adapter = adapter
 
-        setData()
-    }
-
-    override fun setData() {
         launch {
-            val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
-            val favorites = dao.getAll()
-
-            adapter.setData(favorites)
+            viewModel.favoriteItems.collectLatest {
+                adapter.setData(it)
+            }
         }
     }
 
-    private fun deleteFavorite(documentEntity: DocumentEntity) {
-        launch {
-            val dao = FavoriteDatabase.getDatabase(requireContext()).documentDao()
-            dao.delete(documentEntity)
-            val dataset = dao.getAll()
-
-            adapter.setData(dataset)
-        }
+    private fun deleteFavorite(item: DocumentEntity) {
+        viewModel.deleteFavorite(item)
     }
 
     private fun onClickItem(documentEntity: DocumentEntity) {
-        launcher.launch(ImageDetailActivity.newIntent(requireContext(), documentEntity))
+        startActivity(ImageDetailActivity.newIntent(requireContext(), documentEntity))
     }
 }

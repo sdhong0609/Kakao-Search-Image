@@ -1,11 +1,9 @@
 package com.hongstudio.kakaosearchimage.view
 
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
-import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding>(
@@ -34,20 +32,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
                 else -> ""
             }
         }.attach()
-
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.let { position ->
-                    if (fragments[position].isAdded) {
-                        (fragments[position] as BaseFragment).setData()
-                    }
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-
-            override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-
-        })
     }
 }

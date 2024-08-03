@@ -7,7 +7,7 @@ import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
 class ItemSearchedViewHolder(
     private val binding: ItemSearchedBinding,
-    private val onClickFavorite: (item: DocumentEntity, position: Int) -> Unit,
+    private val onClickFavorite: (item: DocumentEntity) -> Unit,
     private val onClickItem: (item: DocumentEntity) -> Unit
 ) : BaseViewHolder<DocumentEntity>(binding) {
 
@@ -26,7 +26,7 @@ class ItemSearchedViewHolder(
             onClickItem(item)
         }
         binding.imageViewFavorite.setOnClickListener {
-            onClickFavorite(item, adapterPosition)
+            onClickFavorite(item)
         }
     }
 }
