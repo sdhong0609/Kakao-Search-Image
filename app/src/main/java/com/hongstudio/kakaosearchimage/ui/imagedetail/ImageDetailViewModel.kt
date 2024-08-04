@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui.imagedetail
 
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
 import com.hongstudio.kakaosearchimage.database.FavoriteDao

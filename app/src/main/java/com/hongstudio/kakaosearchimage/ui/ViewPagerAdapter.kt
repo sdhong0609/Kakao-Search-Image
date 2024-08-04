@@ -1,8 +1,10 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.hongstudio.kakaosearchimage.ui.favorite.FavoriteFragment
+import com.hongstudio.kakaosearchimage.ui.search.SearchFragment
 
 class ViewPagerAdapter(
     activity: FragmentActivity

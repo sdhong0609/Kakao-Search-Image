@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

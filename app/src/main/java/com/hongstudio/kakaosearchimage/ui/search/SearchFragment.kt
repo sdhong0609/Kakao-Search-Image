@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui.search
 
 import android.os.Bundle
 import android.view.View
@@ -9,6 +9,8 @@ import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
+import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
+import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

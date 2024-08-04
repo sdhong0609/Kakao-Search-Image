@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui
 
 import coil.load
 import com.hongstudio.kakaosearchimage.base.BaseViewHolder

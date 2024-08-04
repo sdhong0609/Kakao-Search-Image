@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui
 
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator

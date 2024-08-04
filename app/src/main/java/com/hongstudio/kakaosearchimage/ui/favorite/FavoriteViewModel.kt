@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

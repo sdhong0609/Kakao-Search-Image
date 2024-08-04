@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.view
+package com.hongstudio.kakaosearchimage.ui.imagedetail
 
 import android.content.Context
 import android.content.Intent
