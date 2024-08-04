@@ -55,6 +55,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     }
 
     private fun onClickItem(item: DocumentEntity) {
-        startActivity(ImageDetailActivity.newIntent(requireContext(), item))
+        startActivity(ImageDetailActivity.newIntent(context ?: return, item))
     }
 }

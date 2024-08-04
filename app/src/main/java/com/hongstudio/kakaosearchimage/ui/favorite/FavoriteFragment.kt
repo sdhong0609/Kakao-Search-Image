@@ -42,6 +42,6 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     }
 
     private fun onClickItem(documentEntity: DocumentEntity) {
-        startActivity(ImageDetailActivity.newIntent(requireContext(), documentEntity))
+        startActivity(ImageDetailActivity.newIntent(context ?: return, documentEntity))
     }
 }
