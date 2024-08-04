@@ -17,14 +17,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
     }
 
     private fun setUpView() {
-        val fragments = if (supportFragmentManager.fragments.isEmpty()) {
-            listOf(SearchFragment(), FavoriteFragment())
-        } else {
-            supportFragmentManager.fragments
-        }
-
-        val viewPagerAdapter = ViewPagerAdapter(this, fragments)
-        binding.viewPager.adapter = viewPagerAdapter
+        binding.viewPager.adapter = ViewPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.page_search_title)
