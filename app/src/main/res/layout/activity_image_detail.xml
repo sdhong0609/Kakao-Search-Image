@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingVertical="16dp"
-    tools:context=".view.ImageDetailActivity">
+    android:layout_height="match_parent"
+    tools:context=".ui.imagedetail.ImageDetailActivity">
 
     <ImageView
         android:id="@+id/imageViewDetail"
@@ -15,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:src="@drawable/ic_launcher_background" />
 
     <ImageView
@@ -27,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageViewDetail"
         app:layout_constraintTop_toTopOf="@id/imageViewDetail"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textViewDetailSiteName"
@@ -38,6 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageViewDetail"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="출처 : 한국경제TV" />
 
     <TextView
@@ -49,6 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewDetailSiteName"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="링크 : http://v.media.daum.net/v/20170621155930002" />
 
     <TextView
@@ -60,6 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewDocUrl"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="작성날짜 : 2024년 7월 23일" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

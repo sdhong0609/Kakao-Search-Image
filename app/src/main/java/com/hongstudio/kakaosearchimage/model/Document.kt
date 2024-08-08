@@ -36,11 +36,11 @@ data class Document(
     @Entity
     data class DocumentEntity(
         @PrimaryKey
-        val thumbnailUrl: String = "",
-        val imageUrl: String = "",
-        val displaySitename: String = "",
-        val docUrl: String = "",
-        val datetimeString: String = "",
-        val isFavorite: Boolean = false
+        val thumbnailUrl: String,
+        val imageUrl: String,
+        val displaySitename: String,
+        val docUrl: String,
+        val datetimeString: String,
+        val isFavorite: Boolean
     ) : Parcelable
 }

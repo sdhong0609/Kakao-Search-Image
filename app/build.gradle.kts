@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.coil)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
