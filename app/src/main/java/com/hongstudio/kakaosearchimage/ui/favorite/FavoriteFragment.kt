@@ -32,7 +32,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
 
         launch {
             viewModel.favoriteItems.collectLatest {
-                adapter.setData(it)
+                adapter.submitList(it)
             }
         }
     }

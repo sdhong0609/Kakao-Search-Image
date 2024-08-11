@@ -45,7 +45,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
 
         launch {
             viewModel.searchedItems.collectLatest {
-                adapter.setData(it)
+                adapter.submitList(it)
             }
         }
     }

@@ -1,10 +1,10 @@
 package com.hongstudio.kakaosearchimage.ui
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.viewbinding.ViewBinding
 import com.hongstudio.kakaosearchimage.base.BaseListAdapter
-import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
+import com.hongstudio.kakaosearchimage.base.BaseViewHolder
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
 class ImagesListAdapter(
@@ -21,9 +21,11 @@ class ImagesListAdapter(
         }
     }
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemSearchedViewHolder {
-        val binding =
-            ItemSearchedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemSearchedViewHolder(binding, onClickFavorite, onClickItem)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ViewBinding, DocumentEntity> {
+        return ItemSearchedViewHolder(
+            parent,
+            onClickFavorite,
+            onClickItem
+        ) as BaseViewHolder<ViewBinding, DocumentEntity>
     }
 }
