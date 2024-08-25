@@ -18,13 +18,7 @@ class ItemSearchedViewHolder(
     override fun bind(item: DocumentEntity) {
         binding.imageViewThumbnail.load(item.thumbnailUrl)
         binding.textViewSiteName.text = item.displaySitename
-
-        val starDrawable = if (item.isFavorite) {
-            android.R.drawable.btn_star_big_on
-        } else {
-            android.R.drawable.btn_star_big_off
-        }
-        binding.imageViewFavorite.load(starDrawable)
+        binding.imageViewFavorite.isSelected = item.isFavorite
 
         binding.root.setOnClickListener {
             onClickItem(item)

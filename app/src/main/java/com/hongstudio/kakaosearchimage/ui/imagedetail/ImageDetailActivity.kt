@@ -52,12 +52,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
         }
 
         viewModel.isFavorite.observe {
-            val starDrawable = if (it) {
-                android.R.drawable.btn_star_big_on
-            } else {
-                android.R.drawable.btn_star_big_off
-            }
-            binding.imageViewFavorite.load(starDrawable)
+            binding.imageViewFavorite.isSelected = it
         }
 
         binding.imageViewFavorite.setOnClickListener {
