@@ -3,7 +3,9 @@ package com.hongstudio.kakaosearchimage.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.hongstudio.kakaosearchimage.base.BaseViewHolderItem
 import kotlinx.datetime.Instant
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -42,5 +44,8 @@ data class Document(
         val docUrl: String,
         val datetimeString: String,
         val isFavorite: Boolean
-    ) : Parcelable
+    ) : Parcelable, BaseViewHolderItem {
+        @IgnoredOnParcel
+        override val id: String = thumbnailUrl
+    }
 }
