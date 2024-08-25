@@ -2,31 +2,23 @@ package com.hongstudio.kakaosearchimage.ui.imagedetail
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
+@AndroidEntryPoint
 class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     inflater = ActivityImageDetailBinding::inflate
 ) {
-    private val viewModel: ImageDetailViewModel by viewModels {
-        ImageDetailViewModelFactory(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getParcelableExtra(IMAGE_DETAIL_EXTRA, DocumentEntity::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                intent.getParcelableExtra(IMAGE_DETAIL_EXTRA)
-            }
-        )
-    }
+    private val viewModel: ImageDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +55,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     companion object {
         private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
 
-        fun newIntent(context: Context, item: DocumentEntity): Intent {
+        fun newIntent(context: Context, item: LocalDocument): Intent {
             return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
         }
     }

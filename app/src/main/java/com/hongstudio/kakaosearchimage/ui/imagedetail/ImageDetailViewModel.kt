@@ -1,25 +1,27 @@
 package com.hongstudio.kakaosearchimage.ui.imagedetail
 
+import androidx.lifecycle.SavedStateHandle
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
-import com.hongstudio.kakaosearchimage.database.FavoriteDao
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
-import kotlinx.coroutines.flow.Flow
+import com.hongstudio.kakaosearchimage.data.DocumentRepository
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ImageDetailViewModel(
-    private val dao: FavoriteDao,
-    private val detailItem: DocumentEntity?
+@HiltViewModel
+class ImageDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    val detailItemStream: Flow<DocumentEntity?> = flowOf(detailItem)
+    val detailItemStream: StateFlow<LocalDocument?> = savedStateHandle.getStateFlow("ImageDetailExtra", null)
 
     val isFavorite: StateFlow<Boolean> = combine(
-        dao.getAll(),
+        documentRepository.getAll(),
         detailItemStream
     ) { favorites, detailItem ->
         favorites.any { it.thumbnailUrl == detailItem?.thumbnailUrl }
@@ -27,11 +29,11 @@ class ImageDetailViewModel(
 
     fun onClickFavorite() {
         launch {
-            val data = detailItem ?: return@launch
+            val data = detailItemStream.value ?: return@launch
             if (isFavorite.value) {
-                dao.delete(data)
+                documentRepository.delete(data)
             } else {
-                dao.insert(data.copy(isFavorite = true))
+                documentRepository.insert(data.copy(isFavorite = true))
             }
         }
     }

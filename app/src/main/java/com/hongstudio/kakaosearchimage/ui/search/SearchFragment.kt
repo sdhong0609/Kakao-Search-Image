@@ -7,16 +7,18 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>(
     layoutId = R.layout.fragment_search,
     binder = FragmentSearchBinding::bind
 ) {
-    private val viewModel: SearchViewModel by viewModels { SearchViewModel.Factory }
+    private val viewModel: SearchViewModel by viewModels()
 
     private val adapter = ImagesListAdapter(
         onClickFavorite = ::onClickFavorite,
@@ -46,11 +48,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         }
     }
 
-    private fun onClickFavorite(item: DocumentEntity) {
+    private fun onClickFavorite(item: LocalDocument) {
         viewModel.onClickFavorite(item)
     }
 
-    private fun onClickItem(item: DocumentEntity) {
+    private fun onClickItem(item: LocalDocument) {
         startActivity(ImageDetailActivity.newIntent(context ?: return, item))
     }
 }

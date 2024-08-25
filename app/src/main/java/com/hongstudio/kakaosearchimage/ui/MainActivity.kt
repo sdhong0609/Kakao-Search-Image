@@ -5,7 +5,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
 import com.hongstudio.kakaosearchimage.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(
     inflater = ActivityMainBinding::inflate
 ) {
