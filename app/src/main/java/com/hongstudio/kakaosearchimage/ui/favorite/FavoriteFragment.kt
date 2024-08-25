@@ -10,8 +10,6 @@ import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     layoutId = R.layout.fragment_favorite,
@@ -30,10 +28,8 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
         binding?.recyclerViewImageList?.adapter = adapter
 
-        launch {
-            viewModel.favoriteItems.collectLatest {
-                adapter.submitList(it)
-            }
+        viewModel.favoriteItems.observe {
+            adapter.submitList(it)
         }
     }
 

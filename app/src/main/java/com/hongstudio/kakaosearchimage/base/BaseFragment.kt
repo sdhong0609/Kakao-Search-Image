@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseFragment<VB : ViewBinding>(
@@ -41,5 +43,11 @@ abstract class BaseFragment<VB : ViewBinding>(
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    protected fun <T> Flow<T>.observe(onChanged: (T) -> Unit) {
+        asLiveData().observe(viewLifecycleOwner) {
+            onChanged(it)
+        }
     }
 }

@@ -10,8 +10,6 @@ import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -33,32 +31,33 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        launch {
-            viewModel.detailItem.collectLatest { item ->
-                if (item == null) return@collectLatest run { finish() }
+        viewModel.detailItemStream.observe { item ->
+            if (item == null) return@observe run { finish() }
 
-                binding.imageViewDetail.load(item.imageUrl) {
-                    error(android.R.drawable.ic_delete)
-                }
-
-                binding.textViewDetailSiteName.text = getString(R.string.activity_image_detail_sitename, item.displaySitename)
-                binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
-
-                val localDate = Instant.parse(item.datetimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
-                binding.textViewDateTime.text = getString(
-                    R.string.activity_image_detail_date,
-                    localDate.year,
-                    localDate.monthNumber,
-                    localDate.dayOfMonth
-                )
-
-                val starDrawable = if (item.isFavorite) {
-                    android.R.drawable.btn_star_big_on
-                } else {
-                    android.R.drawable.btn_star_big_off
-                }
-                binding.imageViewFavorite.load(starDrawable)
+            binding.imageViewDetail.load(item.imageUrl) {
+                error(android.R.drawable.ic_delete)
             }
+
+            binding.textViewDetailSiteName.text =
+                getString(R.string.activity_image_detail_sitename, item.displaySitename)
+            binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
+
+            val localDate = Instant.parse(item.datetimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
+            binding.textViewDateTime.text = getString(
+                R.string.activity_image_detail_date,
+                localDate.year,
+                localDate.monthNumber,
+                localDate.dayOfMonth
+            )
+        }
+
+        viewModel.isFavorite.observe {
+            val starDrawable = if (it) {
+                android.R.drawable.btn_star_big_on
+            } else {
+                android.R.drawable.btn_star_big_off
+            }
+            binding.imageViewFavorite.load(starDrawable)
         }
 
         binding.imageViewFavorite.setOnClickListener {

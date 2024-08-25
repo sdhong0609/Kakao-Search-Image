@@ -11,8 +11,6 @@ import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
 import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(
     layoutId = R.layout.fragment_search,
@@ -43,10 +41,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
         binding?.recyclerViewImageList?.adapter = adapter
 
-        launch {
-            viewModel.searchedItems.collectLatest {
-                adapter.submitList(it)
-            }
+        viewModel.searchedItems.observe {
+            adapter.submitList(it)
         }
     }
 
