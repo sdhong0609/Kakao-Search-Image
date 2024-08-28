@@ -1,8 +1,10 @@
 package com.hongstudio.kakaosearchimage
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class GlobalApplication : Application() {
 
     override fun onCreate() {

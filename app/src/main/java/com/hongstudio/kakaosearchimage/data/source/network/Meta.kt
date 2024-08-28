@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.model
+package com.hongstudio.kakaosearchimage.data.source.network
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

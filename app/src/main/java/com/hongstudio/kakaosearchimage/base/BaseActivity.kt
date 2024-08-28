@@ -7,10 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseActivity<VB : ViewBinding>(
@@ -37,6 +39,12 @@ abstract class BaseActivity<VB : ViewBinding>(
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+    }
+
+    protected fun <T> Flow<T>.observe(onChanged: (T) -> Unit) {
+        asLiveData().observe(this@BaseActivity) {
+            onChanged(it)
         }
     }
 }

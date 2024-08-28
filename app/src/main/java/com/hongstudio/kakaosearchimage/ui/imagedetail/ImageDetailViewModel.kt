@@ -1,46 +1,39 @@
 package com.hongstudio.kakaosearchimage.ui.imagedetail
 
+import androidx.lifecycle.SavedStateHandle
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
-import com.hongstudio.kakaosearchimage.database.FavoriteDao
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.hongstudio.kakaosearchimage.data.DocumentRepository
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ImageDetailViewModel(
-    private val dao: FavoriteDao,
-    detailItem: DocumentEntity?
+@HiltViewModel
+class ImageDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    private val _detailItem = MutableStateFlow(detailItem)
-    val detailItem: StateFlow<DocumentEntity?> = _detailItem.asStateFlow()
+    val detailItemStream: StateFlow<LocalDocument?> = savedStateHandle.getStateFlow("ImageDetailExtra", null)
 
-    init {
-        launch {
-            dao.getAll().collectLatest { favorites ->
-                withContext(Dispatchers.Default) {
-                    if (favorites.any { it.thumbnailUrl == _detailItem.value?.thumbnailUrl }) {
-                        _detailItem.update { it?.copy(isFavorite = true) }
-                    } else {
-                        _detailItem.update { it?.copy(isFavorite = false) }
-                    }
-                }
-            }
-        }
-    }
+    val isFavorite: StateFlow<Boolean> = combine(
+        documentRepository.getAll(),
+        detailItemStream
+    ) { favorites, detailItem ->
+        favorites.any { it.thumbnailUrl == detailItem?.thumbnailUrl }
+    }.stateIn(this, SharingStarted.WhileSubscribed(5000), false)
 
     fun onClickFavorite() {
         launch {
-            val data = _detailItem.value ?: return@launch
-            if (data.isFavorite) {
-                dao.delete(data)
+            val data = detailItemStream.value ?: return@launch
+            if (isFavorite.value) {
+                documentRepository.delete(data)
             } else {
-                dao.insert(data.copy(isFavorite = true))
+                documentRepository.insert(data.copy(isFavorite = true))
             }
         }
     }

@@ -1,29 +1,21 @@
 package com.hongstudio.kakaosearchimage.ui
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.viewbinding.ViewBinding
 import com.hongstudio.kakaosearchimage.base.BaseListAdapter
-import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
+import com.hongstudio.kakaosearchimage.base.BaseViewHolder
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 
 class ImagesListAdapter(
-    private val onClickFavorite: (item: DocumentEntity) -> Unit,
-    private val onClickItem: (item: DocumentEntity) -> Unit,
-) : BaseListAdapter<DocumentEntity>(
-    diffCallback = object : DiffUtil.ItemCallback<DocumentEntity>() {
-        override fun areItemsTheSame(oldDocument: DocumentEntity, newDocument: DocumentEntity): Boolean {
-            return oldDocument.thumbnailUrl == newDocument.thumbnailUrl
-        }
+    private val onClickFavorite: (item: LocalDocument) -> Unit,
+    private val onClickItem: (item: LocalDocument) -> Unit,
+) : BaseListAdapter<LocalDocument>() {
 
-        override fun areContentsTheSame(oldDocument: DocumentEntity, newDocument: DocumentEntity): Boolean {
-            return oldDocument == newDocument
-        }
-    }
-) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemSearchedViewHolder {
-        val binding =
-            ItemSearchedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemSearchedViewHolder(binding, onClickFavorite, onClickItem)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ViewBinding, LocalDocument> {
+        return ItemSearchedViewHolder(
+            parent,
+            onClickFavorite,
+            onClickItem
+        ) as BaseViewHolder<ViewBinding, LocalDocument>
     }
 }

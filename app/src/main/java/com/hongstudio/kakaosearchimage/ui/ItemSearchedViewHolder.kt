@@ -1,26 +1,24 @@
 package com.hongstudio.kakaosearchimage.ui
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import coil.load
 import com.hongstudio.kakaosearchimage.base.BaseViewHolder
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 
 class ItemSearchedViewHolder(
-    private val binding: ItemSearchedBinding,
-    private val onClickFavorite: (item: DocumentEntity) -> Unit,
-    private val onClickItem: (item: DocumentEntity) -> Unit
-) : BaseViewHolder<DocumentEntity>(binding) {
+    parent: ViewGroup,
+    private val onClickFavorite: (item: LocalDocument) -> Unit,
+    private val onClickItem: (item: LocalDocument) -> Unit
+) : BaseViewHolder<ItemSearchedBinding, LocalDocument>(
+    ItemSearchedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+) {
 
-    override fun bind(item: DocumentEntity) {
+    override fun bind(item: LocalDocument) {
         binding.imageViewThumbnail.load(item.thumbnailUrl)
         binding.textViewSiteName.text = item.displaySitename
-
-        val starDrawable = if (item.isFavorite) {
-            android.R.drawable.btn_star_big_on
-        } else {
-            android.R.drawable.btn_star_big_off
-        }
-        binding.imageViewFavorite.load(starDrawable)
+        binding.imageViewFavorite.isSelected = item.isFavorite
 
         binding.root.setOnClickListener {
             onClickItem(item)

@@ -1,11 +1,10 @@
-package com.hongstudio.kakaosearchimage.service
+package com.hongstudio.kakaosearchimage.data.source.network
 
-import com.hongstudio.kakaosearchimage.model.GetSearchedImagesResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-interface SearchImageService {
+interface SearchImageApi {
 
     @GET("v2/search/image")
     suspend fun getSearchedImages(

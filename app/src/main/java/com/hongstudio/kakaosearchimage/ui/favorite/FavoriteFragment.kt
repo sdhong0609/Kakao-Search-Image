@@ -6,18 +6,18 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     layoutId = R.layout.fragment_favorite,
     binder = FragmentFavoriteBinding::bind
 ) {
-    private val viewModel: FavoriteViewModel by viewModels { FavoriteViewModel.Factory }
+    private val viewModel: FavoriteViewModel by viewModels()
 
     private val adapter = ImagesListAdapter(
         onClickFavorite = ::deleteFavorite,
@@ -30,18 +30,16 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         binding?.recyclerViewImageList?.layoutManager = LinearLayoutManager(context)
         binding?.recyclerViewImageList?.adapter = adapter
 
-        launch {
-            viewModel.favoriteItems.collectLatest {
-                adapter.setData(it)
-            }
+        viewModel.favoriteItems.observe {
+            adapter.submitList(it)
         }
     }
 
-    private fun deleteFavorite(item: DocumentEntity) {
+    private fun deleteFavorite(item: LocalDocument) {
         viewModel.deleteFavorite(item)
     }
 
-    private fun onClickItem(documentEntity: DocumentEntity) {
-        startActivity(ImageDetailActivity.newIntent(context ?: return, documentEntity))
+    private fun onClickItem(localDocument: LocalDocument) {
+        startActivity(ImageDetailActivity.newIntent(context ?: return, localDocument))
     }
 }

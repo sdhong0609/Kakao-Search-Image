@@ -1,16 +1,11 @@
 package com.hongstudio.kakaosearchimage.ui.search
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.hongstudio.kakaosearchimage.BuildConfig
-import com.hongstudio.kakaosearchimage.GlobalApplication
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
-import com.hongstudio.kakaosearchimage.database.FavoriteDao
-import com.hongstudio.kakaosearchimage.database.FavoriteDatabase
-import com.hongstudio.kakaosearchimage.model.Document.DocumentEntity
-import com.hongstudio.kakaosearchimage.service.RetrofitObject
+import com.hongstudio.kakaosearchimage.data.DocumentRepository
+import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
+import com.hongstudio.kakaosearchimage.data.toLocal
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,21 +14,23 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SearchViewModel(
-    private val dao: FavoriteDao
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    private val _searchedItems = MutableStateFlow(listOf<DocumentEntity>())
-    val searchedItems: StateFlow<List<DocumentEntity>> = _searchedItems.asStateFlow()
+    private val _searchedItems = MutableStateFlow(listOf<LocalDocument>())
+    val searchedItems: StateFlow<List<LocalDocument>> = _searchedItems.asStateFlow()
 
     fun getSearchedItems(keyword: String) {
         if (keyword.isBlank()) return
 
         launch {
-            val response = RetrofitObject.searchImageService.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
+            val response = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
             _searchedItems.update {
-                response.documents.map { it.toEntity() }
+                response.documents.map { it.toLocal() }
             }
 
             updateFavorites()
@@ -42,13 +39,13 @@ class SearchViewModel(
 
     private fun updateFavorites() {
         launch {
-            dao.getAll().collectLatest { favorites ->
+            documentRepository.getAll().collectLatest { favorites ->
                 val updatedItems = withContext(Dispatchers.Default) {
-                    _searchedItems.value.map { documentEntity ->
-                        if (favorites.any { it.thumbnailUrl == documentEntity.thumbnailUrl }) {
-                            documentEntity.copy(isFavorite = true)
+                    _searchedItems.value.map { localDocument ->
+                        if (favorites.any { it.thumbnailUrl == localDocument.thumbnailUrl }) {
+                            localDocument.copy(isFavorite = true)
                         } else {
-                            documentEntity.copy(isFavorite = false)
+                            localDocument.copy(isFavorite = false)
                         }
                     }
                 }
@@ -57,26 +54,12 @@ class SearchViewModel(
         }
     }
 
-    fun onClickFavorite(item: DocumentEntity) {
+    fun onClickFavorite(item: LocalDocument) {
         launch {
             if (item.isFavorite) {
-                dao.delete(item)
+                documentRepository.delete(item)
             } else {
-                dao.insert(item.copy(isFavorite = true))
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras
-            ): T {
-                val application = checkNotNull(extras[APPLICATION_KEY]) as GlobalApplication
-                val dao = FavoriteDatabase.getDatabase(application).documentDao()
-                return SearchViewModel(dao) as T
+                documentRepository.insert(item.copy(isFavorite = true))
             }
         }
     }
