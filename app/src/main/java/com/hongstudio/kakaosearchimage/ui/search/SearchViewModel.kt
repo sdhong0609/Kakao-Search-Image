@@ -1,7 +1,7 @@
 package com.hongstudio.kakaosearchimage.ui.search
 
-import com.hongstudio.data.DocumentRepository
-import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.data.toLocal
 import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
@@ -21,8 +21,8 @@ class SearchViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    private val _searchedItems = MutableStateFlow(listOf<LocalDocument>())
-    val searchedItems: StateFlow<List<LocalDocument>> = _searchedItems.asStateFlow()
+    private val _searchedItems = MutableStateFlow(listOf<com.hongstudio.local.model.LocalDocument>())
+    val searchedItems: StateFlow<List<com.hongstudio.local.model.LocalDocument>> = _searchedItems.asStateFlow()
 
     fun getSearchedItems(keyword: String) {
         if (keyword.isBlank()) return
@@ -54,7 +54,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onClickFavorite(item: LocalDocument) {
+    fun onClickFavorite(item: com.hongstudio.local.model.LocalDocument) {
         launch {
             if (item.isFavorite) {
                 documentRepository.delete(item)

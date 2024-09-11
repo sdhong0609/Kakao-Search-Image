@@ -1,9 +1,7 @@
-package com.hongstudio.data.di
+package com.hongstudio.local.module.room
 
 import android.content.Context
 import androidx.room.Room
-import com.hongstudio.data.source.local.FavoriteDao
-import com.hongstudio.data.source.local.FavoriteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,15 +15,15 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDataBase(@ApplicationContext context: Context): FavoriteDatabase {
+    fun provideDataBase(@ApplicationContext context: Context): com.hongstudio.local.room.FavoriteDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            FavoriteDatabase::class.java,
+            com.hongstudio.local.room.FavoriteDatabase::class.java,
             "favorite-database"
         ).build()
     }
 
     @Singleton
     @Provides
-    fun provideFavoriteDao(database: FavoriteDatabase): FavoriteDao = database.favoriteDao()
+    fun provideFavoriteDao(database: com.hongstudio.local.room.FavoriteDatabase): com.hongstudio.local.dao.FavoriteDao = database.favoriteDao()
 }

@@ -1,7 +1,7 @@
 package com.hongstudio.kakaosearchimage.ui.favorite
 
-import com.hongstudio.data.DocumentRepository
-import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +17,8 @@ class FavoriteViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    private val _favoriteItems = MutableStateFlow(listOf<LocalDocument>())
-    val favoriteItems: StateFlow<List<LocalDocument>> = _favoriteItems.asStateFlow()
+    private val _favoriteItems = MutableStateFlow(listOf<com.hongstudio.local.model.LocalDocument>())
+    val favoriteItems: StateFlow<List<com.hongstudio.local.model.LocalDocument>> = _favoriteItems.asStateFlow()
 
     init {
         launch {
@@ -28,7 +28,7 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun deleteFavorite(item: LocalDocument) {
+    fun deleteFavorite(item: com.hongstudio.local.model.LocalDocument) {
         launch {
             documentRepository.delete(item)
         }

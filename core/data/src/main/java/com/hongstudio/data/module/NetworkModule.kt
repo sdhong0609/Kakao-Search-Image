@@ -1,4 +1,4 @@
-package com.hongstudio.data.di
+package com.hongstudio.data.module
 
 import com.hongstudio.data.BuildConfig
 import com.hongstudio.data.common.DefaultJson

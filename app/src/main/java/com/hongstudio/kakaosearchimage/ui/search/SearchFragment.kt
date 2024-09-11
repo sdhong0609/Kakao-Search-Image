@@ -5,7 +5,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
@@ -48,11 +48,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         }
     }
 
-    private fun onClickFavorite(item: LocalDocument) {
+    private fun onClickFavorite(item: com.hongstudio.local.model.LocalDocument) {
         viewModel.onClickFavorite(item)
     }
 
-    private fun onClickItem(item: LocalDocument) {
+    private fun onClickItem(item: com.hongstudio.local.model.LocalDocument) {
         startActivity(ImageDetailActivity.newIntent(context ?: return, item))
     }
 }

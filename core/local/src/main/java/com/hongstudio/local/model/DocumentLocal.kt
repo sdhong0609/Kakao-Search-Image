@@ -1,16 +1,17 @@
-package com.hongstudio.data.source.local
+package com.hongstudio.local.model
 
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.data.source.base.BaseViewHolderItem
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity
-data class LocalDocument(
+data class DocumentLocal(
     @PrimaryKey
     val thumbnailUrl: String,
     val imageUrl: String,
@@ -24,3 +25,12 @@ data class LocalDocument(
     @Ignore
     override val id: String = thumbnailUrl
 }
+
+fun DocumentLocal.toDto() = DocumentDto(
+    thumbnailUrl = thumbnailUrl,
+    imageUrl = imageUrl,
+    displaySitename = displaySitename,
+    docUrl = docUrl,
+    datetimeString = datetimeString,
+    isFavorite = isFavorite
+)

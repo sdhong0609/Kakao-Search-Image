@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
@@ -35,11 +35,11 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         }
     }
 
-    private fun deleteFavorite(item: LocalDocument) {
+    private fun deleteFavorite(item: com.hongstudio.local.model.LocalDocument) {
         viewModel.deleteFavorite(item)
     }
 
-    private fun onClickItem(localDocument: LocalDocument) {
+    private fun onClickItem(localDocument: com.hongstudio.local.model.LocalDocument) {
         startActivity(ImageDetailActivity.newIntent(context ?: return, localDocument))
     }
 }

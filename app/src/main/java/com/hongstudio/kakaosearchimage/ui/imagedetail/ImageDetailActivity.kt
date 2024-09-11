@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
-import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
@@ -55,7 +55,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     companion object {
         private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
 
-        fun newIntent(context: Context, item: LocalDocument): Intent {
+        fun newIntent(context: Context, item: com.hongstudio.local.model.LocalDocument): Intent {
             return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
         }
     }
