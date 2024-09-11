@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.base
+package com.hongstudio.ui.base
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter

@@ -51,6 +51,9 @@ android {
 
 dependencies {
     implementation(project(":core:data"))
+    implementation(project(":core:local"))
+    implementation(project(":core:remote"))
+    implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

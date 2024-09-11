@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.base
+package com.hongstudio.ui.base
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

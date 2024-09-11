@@ -3,12 +3,12 @@ package com.hongstudio.kakaosearchimage.ui
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.kakaosearchimage.base.BaseActivity
+import com.hongstudio.ui.base.BaseActivity
 import com.hongstudio.kakaosearchimage.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(
+class MainActivity : com.hongstudio.ui.base.BaseActivity<ActivityMainBinding>(
     inflater = ActivityMainBinding::inflate
 ) {
 

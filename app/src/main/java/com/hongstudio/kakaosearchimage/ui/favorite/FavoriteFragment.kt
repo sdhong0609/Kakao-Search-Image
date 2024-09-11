@@ -2,11 +2,12 @@ package com.hongstudio.kakaosearchimage.ui.favorite
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.kakaosearchimage.base.BaseFragment
+import com.hongstudio.ui.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity

@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import coil.load
 import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.kakaosearchimage.base.BaseActivity
+import com.hongstudio.ui.base.BaseActivity
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Instant
@@ -15,7 +15,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @AndroidEntryPoint
-class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
+class ImageDetailActivity : com.hongstudio.ui.base.BaseActivity<ActivityImageDetailBinding>(
     inflater = ActivityImageDetailBinding::inflate
 ) {
     private val viewModel: ImageDetailViewModel by viewModels()

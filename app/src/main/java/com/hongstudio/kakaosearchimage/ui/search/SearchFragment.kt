@@ -7,14 +7,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.kakaosearchimage.base.BaseFragment
+import com.hongstudio.ui.base.BaseFragment
 import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<FragmentSearchBinding>(
+class SearchFragment : com.hongstudio.ui.base.BaseFragment<FragmentSearchBinding>(
     layoutId = R.layout.fragment_search,
     binder = FragmentSearchBinding::bind
 ) {

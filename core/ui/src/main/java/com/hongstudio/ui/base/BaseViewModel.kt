@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.base
+package com.hongstudio.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

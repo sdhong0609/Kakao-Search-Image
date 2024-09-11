@@ -4,7 +4,7 @@ import com.hongstudio.data.repository.DocumentRepository
 import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.data.toLocal
 import com.hongstudio.kakaosearchimage.BuildConfig
-import com.hongstudio.kakaosearchimage.base.BaseViewModel
+import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
-) : BaseViewModel() {
+) : com.hongstudio.ui.base.BaseViewModel() {
 
     private val _searchedItems = MutableStateFlow(listOf<com.hongstudio.local.model.LocalDocument>())
     val searchedItems: StateFlow<List<com.hongstudio.local.model.LocalDocument>> = _searchedItems.asStateFlow()
