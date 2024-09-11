@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
-import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.image_detail.databinding.ActivityImageDetailBinding
 import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +54,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     companion object {
         private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
 
-        fun newIntent(context: Context, item: DocumentDto): Intent {
+        fun newIntent(context: Context, item: DocumentModel): Intent {
             return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
         }
     }

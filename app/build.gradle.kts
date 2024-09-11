@@ -11,6 +11,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -46,6 +47,7 @@ dependencies {
     implementation(project(":core:local"))
     implementation(project(":core:remote"))
     implementation(project(":core:ui"))
+    implementation(project(":feature:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

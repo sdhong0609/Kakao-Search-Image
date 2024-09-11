@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.ui
+package com.hongstudio.common.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -9,7 +9,8 @@ import com.hongstudio.search.SearchFragment
 class ViewPagerAdapter(
     activity: FragmentActivity
 ) : FragmentStateAdapter(activity) {
-    private val fragments: List<Fragment> = listOf(com.hongstudio.search.SearchFragment(), com.hongstudio.favorite.FavoriteFragment())
+    private val fragments: List<Fragment> =
+        listOf(com.hongstudio.search.SearchFragment(), com.hongstudio.favorite.FavoriteFragment())
 
     override fun getItemCount(): Int = fragments.size
 

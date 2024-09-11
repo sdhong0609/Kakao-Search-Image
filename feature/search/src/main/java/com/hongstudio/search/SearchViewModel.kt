@@ -1,6 +1,8 @@
 package com.hongstudio.search
 
-import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.common.model.DocumentModel
+import com.hongstudio.common.model.toDto
+import com.hongstudio.common.model.toUiModel
 import com.hongstudio.data.repository.DocumentRepository
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,15 +21,17 @@ class SearchViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    private val _searchedItems = MutableStateFlow(listOf<DocumentDto>())
-    val searchedItems: StateFlow<List<DocumentDto>> = _searchedItems.asStateFlow()
+    private val _searchedItems = MutableStateFlow(listOf<DocumentModel>())
+    val searchedItems: StateFlow<List<DocumentModel>> = _searchedItems.asStateFlow()
 
     fun getSearchedItems(keyword: String) {
         if (keyword.isBlank()) return
 
         launch {
             val items = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
-            _searchedItems.update { items }
+            _searchedItems.update {
+                items.map { it.toUiModel() }
+            }
 
             updateFavorites()
         }
@@ -50,12 +54,12 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onClickFavorite(item: DocumentDto) {
+    fun onClickFavorite(item: DocumentModel) {
         launch {
             if (item.isFavorite) {
-                documentRepository.delete(item)
+                documentRepository.delete(item.toDto())
             } else {
-                documentRepository.insert(item.copy(isFavorite = true))
+                documentRepository.insert(item.copy(isFavorite = true).toDto())
             }
         }
     }

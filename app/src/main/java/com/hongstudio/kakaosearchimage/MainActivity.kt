@@ -1,14 +1,14 @@
-package com.hongstudio.kakaosearchimage.ui
+package com.hongstudio.kakaosearchimage
 
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator
-import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.ui.base.BaseActivity
+import com.hongstudio.common.ui.ViewPagerAdapter
 import com.hongstudio.kakaosearchimage.databinding.ActivityMainBinding
+import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : com.hongstudio.ui.base.BaseActivity<ActivityMainBinding>(
+class MainActivity : BaseActivity<ActivityMainBinding>(
     inflater = ActivityMainBinding::inflate
 ) {
 

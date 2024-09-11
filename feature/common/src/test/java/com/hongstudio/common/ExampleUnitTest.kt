@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage
+package com.hongstudio.common
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

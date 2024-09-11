@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
-    namespace = "com.hongstudio.image_detail"
+    namespace = "com.hongstudio.common"
     compileSdk = 34
 
     buildFeatures {
@@ -38,18 +37,10 @@ android {
 dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-
-    implementation(libs.androidx.activity.ktx)
-
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-
-    implementation(libs.kotlinx.datetime)
 
     implementation(libs.coil)
 

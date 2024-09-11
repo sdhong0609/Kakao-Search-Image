@@ -5,8 +5,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
+import com.hongstudio.common.model.DocumentModel
+import com.hongstudio.common.ui.DocumentListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
 import com.hongstudio.search.databinding.FragmentSearchBinding
 import com.hongstudio.ui.base.BaseFragment
@@ -19,7 +19,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
 ) {
     private val viewModel: SearchViewModel by viewModels()
 
-    private val adapter = ImagesListAdapter(
+    private val adapter = DocumentListAdapter(
         onClickFavorite = ::onClickFavorite,
         onClickItem = ::onClickItem
     )
@@ -47,11 +47,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         }
     }
 
-    private fun onClickFavorite(item: DocumentDto) {
+    private fun onClickFavorite(item: DocumentModel) {
         viewModel.onClickFavorite(item)
     }
 
-    private fun onClickItem(item: DocumentDto) {
+    private fun onClickItem(item: DocumentModel) {
         startActivity(ImageDetailActivity.newIntent(context ?: return, item))
     }
 }

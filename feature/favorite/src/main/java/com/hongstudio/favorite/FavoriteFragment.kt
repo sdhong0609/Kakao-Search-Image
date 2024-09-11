@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.common.model.DocumentModel
+import com.hongstudio.common.ui.DocumentListAdapter
 import com.hongstudio.favorite.databinding.FragmentFavoriteBinding
-import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +18,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
 ) {
     private val viewModel: FavoriteViewModel by viewModels()
 
-    private val adapter = ImagesListAdapter(
+    private val adapter = DocumentListAdapter(
         onClickFavorite = ::deleteFavorite,
         onClickItem = ::onClickItem
     )
@@ -34,11 +34,11 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         }
     }
 
-    private fun deleteFavorite(item: DocumentDto) {
+    private fun deleteFavorite(item: DocumentModel) {
         viewModel.deleteFavorite(item)
     }
 
-    private fun onClickItem(localDocument: DocumentDto) {
-        startActivity(ImageDetailActivity.newIntent(context ?: return, localDocument))
+    private fun onClickItem(item: DocumentModel) {
+        startActivity(ImageDetailActivity.newIntent(context ?: return, item))
     }
 }

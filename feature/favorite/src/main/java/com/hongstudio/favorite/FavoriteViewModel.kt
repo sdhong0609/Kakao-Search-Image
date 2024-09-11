@@ -1,6 +1,8 @@
 package com.hongstudio.favorite
 
-import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.common.model.DocumentModel
+import com.hongstudio.common.model.toDto
+import com.hongstudio.common.model.toUiModel
 import com.hongstudio.data.repository.DocumentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,20 +18,22 @@ class FavoriteViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : com.hongstudio.ui.base.BaseViewModel() {
 
-    private val _favoriteItems = MutableStateFlow(listOf<DocumentDto>())
-    val favoriteItems: StateFlow<List<DocumentDto>> = _favoriteItems.asStateFlow()
+    private val _favoriteItems = MutableStateFlow(listOf<DocumentModel>())
+    val favoriteItems: StateFlow<List<DocumentModel>> = _favoriteItems.asStateFlow()
 
     init {
         launch {
             documentRepository.getAll().collectLatest { favorites ->
-                _favoriteItems.update { favorites }
+                _favoriteItems.update {
+                    favorites.map { it.toUiModel() }
+                }
             }
         }
     }
 
-    fun deleteFavorite(item: DocumentDto) {
+    fun deleteFavorite(item: DocumentModel) {
         launch {
-            documentRepository.delete(item)
+            documentRepository.delete(item.toDto())
         }
     }
 }

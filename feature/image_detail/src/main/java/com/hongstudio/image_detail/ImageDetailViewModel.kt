@@ -1,7 +1,8 @@
 package com.hongstudio.image_detail
 
 import androidx.lifecycle.SavedStateHandle
-import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.common.model.DocumentModel
+import com.hongstudio.common.model.toDto
 import com.hongstudio.data.repository.DocumentRepository
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ class ImageDetailViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    val detailItemStream: StateFlow<DocumentDto?> = savedStateHandle.getStateFlow("ImageDetailExtra", null)
+    val detailItemStream: StateFlow<DocumentModel?> = savedStateHandle.getStateFlow("ImageDetailExtra", null)
 
     val isFavorite: StateFlow<Boolean> = combine(
         documentRepository.getAll(),
@@ -31,9 +32,9 @@ class ImageDetailViewModel @Inject constructor(
         launch {
             val data = detailItemStream.value ?: return@launch
             if (isFavorite.value) {
-                documentRepository.delete(data)
+                documentRepository.delete(data.toDto())
             } else {
-                documentRepository.insert(data.copy(isFavorite = true))
+                documentRepository.insert(data.copy(isFavorite = true).toDto())
             }
         }
     }
