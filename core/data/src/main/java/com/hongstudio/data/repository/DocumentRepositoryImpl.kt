@@ -1,9 +1,8 @@
 package com.hongstudio.data.repository
 
 import com.hongstudio.data.datasource.local.DocumentLocalDataSource
+import com.hongstudio.data.datasource.remote.DocumentRemoteDataSource
 import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.data.source.network.GetSearchedImagesResponse
-import com.hongstudio.data.source.network.SearchImageApi
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class DocumentRepositoryImpl @Inject constructor(
     private val localDataSource: DocumentLocalDataSource,
-    private val documentRemoteDataSource: SearchImageApi
+    private val remoteDataSource: DocumentRemoteDataSource
 ) : DocumentRepository {
 
     override fun getAll(): Flow<List<DocumentDto>> {
@@ -29,8 +28,8 @@ class DocumentRepositoryImpl @Inject constructor(
     override suspend fun getSearchedImages(
         authorization: String,
         query: String
-    ): GetSearchedImagesResponse {
-        return documentRemoteDataSource.getSearchedImages(
+    ): List<DocumentDto> {
+        return remoteDataSource.getSearchedImages(
             authorization = authorization,
             query = query
         )

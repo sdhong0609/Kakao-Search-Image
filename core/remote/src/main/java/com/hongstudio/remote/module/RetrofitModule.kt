@@ -1,8 +1,7 @@
-package com.hongstudio.data.module
+package com.hongstudio.remote.module
 
 import com.hongstudio.data.BuildConfig
 import com.hongstudio.data.common.DefaultJson
-import com.hongstudio.data.source.network.SearchImageApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -14,20 +13,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
-
-    private val contentType = "application/json".toMediaType()
+object RetrofitModule {
 
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
-        .addConverterFactory(DefaultJson.asConverterFactory(contentType))
+        .addConverterFactory(DefaultJson.asConverterFactory("application/json".toMediaType()))
         .build()
-
-    @Singleton
-    @Provides
-    fun provideSearchImageApi(retrofit: Retrofit): SearchImageApi {
-        return retrofit.create(SearchImageApi::class.java)
-    }
 }

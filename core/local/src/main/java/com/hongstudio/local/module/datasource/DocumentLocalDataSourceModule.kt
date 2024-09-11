@@ -10,9 +10,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DocumentLocalDataSourceModule {
+interface DocumentLocalDataSourceModule {
 
     @Singleton
     @Binds
-    abstract fun bindDocumentLocalDataSource(impl: DocumentLocalDataSourceImpl): DocumentLocalDataSource
+    fun bindDocumentLocalDataSource(impl: DocumentLocalDataSourceImpl): DocumentLocalDataSource
 }

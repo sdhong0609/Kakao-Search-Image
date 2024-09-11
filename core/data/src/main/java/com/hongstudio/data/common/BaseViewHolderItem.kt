@@ -1,4 +1,4 @@
-package com.hongstudio.data.source.base
+package com.hongstudio.data.common
 
 interface BaseViewHolderItem {
 

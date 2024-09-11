@@ -1,7 +1,6 @@
 package com.hongstudio.data.repository
 
 import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.data.source.network.GetSearchedImagesResponse
 import kotlinx.coroutines.flow.Flow
 
 interface DocumentRepository {
@@ -15,5 +14,5 @@ interface DocumentRepository {
     suspend fun getSearchedImages(
         authorization: String,
         query: String
-    ): GetSearchedImagesResponse
+    ): List<DocumentDto>
 }

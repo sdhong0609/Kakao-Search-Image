@@ -1,30 +1,20 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt.android)
 }
 
 android {
-    namespace = "com.hongstudio.data"
+    namespace = "com.hongstudio.remote"
     compileSdk = 34
-
-    buildFeatures {
-        buildConfig = true
-    }
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("key.properties").inputStream())
 
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
     }
 
     buildTypes {
@@ -43,12 +33,17 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+
+    implementation(libs.kotlinx.datetime)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

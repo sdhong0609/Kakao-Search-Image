@@ -1,5 +1,6 @@
-package com.hongstudio.data.source.network
+package com.hongstudio.remote.api
 
+import com.hongstudio.remote.model.GetSearchedImagesResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

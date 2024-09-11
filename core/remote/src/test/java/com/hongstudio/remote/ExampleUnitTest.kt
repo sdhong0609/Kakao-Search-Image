@@ -1,4 +1,4 @@
-package com.hongstudio.local
+package com.hongstudio.remote
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

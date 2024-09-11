@@ -1,4 +1,4 @@
-package com.hongstudio.data.source.network
+package com.hongstudio.remote.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

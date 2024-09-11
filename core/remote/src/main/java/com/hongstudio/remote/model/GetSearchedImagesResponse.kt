@@ -1,4 +1,4 @@
-package com.hongstudio.data.source.network
+package com.hongstudio.remote.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,5 +8,5 @@ data class GetSearchedImagesResponse(
     @SerialName("meta")
     val meta: Meta,
     @SerialName("documents")
-    val documents: List<NetworkDocument>
+    val documents: List<DocumentRemote>
 )
