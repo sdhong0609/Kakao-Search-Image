@@ -2,7 +2,4 @@
     <string name="app_name">Kakao Search Image</string>
     <string name="page_search_title">검색</string>
     <string name="page_favorite_title">즐겨찾기</string>
-    <string name="activity_image_detail_sitename">출처 : %s</string>
-    <string name="activity_image_detail_link">링크 : %s</string>
-    <string name="activity_image_detail_date">작성날짜 : %1$d년 %2$d월 %3$d일</string>
 </resources>

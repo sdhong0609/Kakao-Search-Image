@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.ui.imagedetail
+package com.hongstudio.image_detail
 
 import android.content.Context
 import android.content.Intent
@@ -6,8 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
 import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
+import com.hongstudio.image_detail.databinding.ActivityImageDetailBinding
 import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Instant

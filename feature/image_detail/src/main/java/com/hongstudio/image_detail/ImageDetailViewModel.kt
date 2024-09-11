@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.ui.imagedetail
+package com.hongstudio.image_detail
 
 import androidx.lifecycle.SavedStateHandle
 import com.hongstudio.data.model.DocumentDto
