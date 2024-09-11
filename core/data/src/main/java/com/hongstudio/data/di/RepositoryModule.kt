@@ -1,7 +1,7 @@
-package com.hongstudio.kakaosearchimage.di
+package com.hongstudio.data.di
 
-import com.hongstudio.kakaosearchimage.data.DefaultDocumentRepository
-import com.hongstudio.kakaosearchimage.data.DocumentRepository
+import com.hongstudio.data.DefaultDocumentRepository
+import com.hongstudio.data.DocumentRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

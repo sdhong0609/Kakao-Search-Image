@@ -1,10 +1,10 @@
 package com.hongstudio.kakaosearchimage.ui.search
 
+import com.hongstudio.data.DocumentRepository
+import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.data.toLocal
 import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
-import com.hongstudio.kakaosearchimage.data.DocumentRepository
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
-import com.hongstudio.kakaosearchimage.data.toLocal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

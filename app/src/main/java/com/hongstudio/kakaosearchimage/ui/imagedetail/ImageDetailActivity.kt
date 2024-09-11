@@ -5,9 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
+import com.hongstudio.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.R
 import com.hongstudio.kakaosearchimage.base.BaseActivity
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Instant

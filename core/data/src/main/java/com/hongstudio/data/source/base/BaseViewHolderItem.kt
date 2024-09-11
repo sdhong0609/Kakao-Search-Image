@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.base
+package com.hongstudio.data.source.base
 
 interface BaseViewHolderItem {
 

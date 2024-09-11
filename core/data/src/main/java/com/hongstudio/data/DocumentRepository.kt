@@ -1,7 +1,7 @@
-package com.hongstudio.kakaosearchimage.data
+package com.hongstudio.data
 
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
-import com.hongstudio.kakaosearchimage.data.source.network.GetSearchedImagesResponse
+import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.data.source.network.GetSearchedImagesResponse
 import kotlinx.coroutines.flow.Flow
 
 interface DocumentRepository {

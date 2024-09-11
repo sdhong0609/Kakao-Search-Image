@@ -1,7 +1,7 @@
-package com.hongstudio.kakaosearchimage.data
+package com.hongstudio.data
 
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
-import com.hongstudio.kakaosearchimage.data.source.network.NetworkDocument
+import com.hongstudio.data.source.local.LocalDocument
+import com.hongstudio.data.source.network.NetworkDocument
 
 fun NetworkDocument.toLocal() = LocalDocument(
     thumbnailUrl = thumbnailUrl,

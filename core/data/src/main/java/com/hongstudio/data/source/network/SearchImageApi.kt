@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.data.source.network
+package com.hongstudio.data.source.network
 
 import retrofit2.http.GET
 import retrofit2.http.Header

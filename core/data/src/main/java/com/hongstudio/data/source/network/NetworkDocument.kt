@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.data.source.network
+package com.hongstudio.data.source.network
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName

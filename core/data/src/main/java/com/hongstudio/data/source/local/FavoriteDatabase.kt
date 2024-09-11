@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.data.source.local
+package com.hongstudio.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

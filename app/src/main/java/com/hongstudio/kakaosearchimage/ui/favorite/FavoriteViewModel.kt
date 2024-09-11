@@ -1,8 +1,8 @@
 package com.hongstudio.kakaosearchimage.ui.favorite
 
+import com.hongstudio.data.DocumentRepository
+import com.hongstudio.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.base.BaseViewModel
-import com.hongstudio.kakaosearchimage.data.DocumentRepository
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.hongstudio.kakaosearchimage.common
+package com.hongstudio.data.common
 
 import kotlinx.serialization.json.Json
 

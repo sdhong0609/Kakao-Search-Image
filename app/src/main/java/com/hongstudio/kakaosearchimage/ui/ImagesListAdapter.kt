@@ -2,9 +2,9 @@ package com.hongstudio.kakaosearchimage.ui
 
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import com.hongstudio.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.base.BaseListAdapter
 import com.hongstudio.kakaosearchimage.base.BaseViewHolder
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 
 class ImagesListAdapter(
     private val onClickFavorite: (item: LocalDocument) -> Unit,

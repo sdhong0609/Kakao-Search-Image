@@ -1,9 +1,9 @@
-package com.hongstudio.kakaosearchimage.di
+package com.hongstudio.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hongstudio.kakaosearchimage.data.source.local.FavoriteDao
-import com.hongstudio.kakaosearchimage.data.source.local.FavoriteDatabase
+import com.hongstudio.data.source.local.FavoriteDao
+import com.hongstudio.data.source.local.FavoriteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

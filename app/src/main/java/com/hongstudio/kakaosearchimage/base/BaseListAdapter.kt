@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseListAdapter<ITEM : BaseViewHolderItem> : ListAdapter<ITEM, BaseViewHolder<ViewBinding, ITEM>>(
+abstract class BaseListAdapter<ITEM : com.hongstudio.data.source.base.BaseViewHolderItem> : ListAdapter<ITEM, BaseViewHolder<ViewBinding, ITEM>>(
     object : DiffUtil.ItemCallback<ITEM>() {
         override fun areItemsTheSame(oldItem: ITEM, newItem: ITEM): Boolean {
             return oldItem.id == newItem.id

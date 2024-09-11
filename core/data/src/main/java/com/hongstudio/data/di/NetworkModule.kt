@@ -1,8 +1,8 @@
-package com.hongstudio.kakaosearchimage.di
+package com.hongstudio.data.di
 
-import com.hongstudio.kakaosearchimage.BuildConfig
-import com.hongstudio.kakaosearchimage.common.DefaultJson
-import com.hongstudio.kakaosearchimage.data.source.network.SearchImageApi
+import com.hongstudio.data.BuildConfig
+import com.hongstudio.data.common.DefaultJson
+import com.hongstudio.data.source.network.SearchImageApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

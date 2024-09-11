@@ -3,8 +3,8 @@ package com.hongstudio.kakaosearchimage.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import coil.load
+import com.hongstudio.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.base.BaseViewHolder
-import com.hongstudio.kakaosearchimage.data.source.local.LocalDocument
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
 
 class ItemSearchedViewHolder(

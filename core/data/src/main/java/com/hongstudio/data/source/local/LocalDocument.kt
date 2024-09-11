@@ -1,10 +1,10 @@
-package com.hongstudio.kakaosearchimage.data.source.local
+package com.hongstudio.data.source.local
 
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.hongstudio.kakaosearchimage.base.BaseViewHolderItem
+import com.hongstudio.data.source.base.BaseViewHolderItem
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
