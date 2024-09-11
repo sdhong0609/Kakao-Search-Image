@@ -47,7 +47,8 @@ dependencies {
     implementation(project(":core:local"))
     implementation(project(":core:remote"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:common"))
+    implementation(project(":feature:search"))
+    implementation(project(":feature:favorite"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

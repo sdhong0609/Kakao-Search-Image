@@ -2,7 +2,6 @@ package com.hongstudio.kakaosearchimage
 
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator
-import com.hongstudio.common.ui.ViewPagerAdapter
 import com.hongstudio.kakaosearchimage.databinding.ActivityMainBinding
 import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint

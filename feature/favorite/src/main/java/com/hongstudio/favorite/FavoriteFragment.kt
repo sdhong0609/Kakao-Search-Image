@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.ui.DocumentListAdapter
 import com.hongstudio.favorite.databinding.FragmentFavoriteBinding
-import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
+import com.hongstudio.image_detail.ImageDetailActivity
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
