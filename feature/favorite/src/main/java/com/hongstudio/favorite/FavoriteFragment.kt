@@ -1,16 +1,14 @@
-package com.hongstudio.kakaosearchimage.ui.favorite
+package com.hongstudio.favorite
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hongstudio.local.model.LocalDocument
-import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.ui.base.BaseFragment
-import com.hongstudio.kakaosearchimage.databinding.FragmentFavoriteBinding
+import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.favorite.databinding.FragmentFavoriteBinding
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
+import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,11 +34,11 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
         }
     }
 
-    private fun deleteFavorite(item: com.hongstudio.local.model.LocalDocument) {
+    private fun deleteFavorite(item: DocumentDto) {
         viewModel.deleteFavorite(item)
     }
 
-    private fun onClickItem(localDocument: com.hongstudio.local.model.LocalDocument) {
+    private fun onClickItem(localDocument: DocumentDto) {
         startActivity(ImageDetailActivity.newIntent(context ?: return, localDocument))
     }
 }

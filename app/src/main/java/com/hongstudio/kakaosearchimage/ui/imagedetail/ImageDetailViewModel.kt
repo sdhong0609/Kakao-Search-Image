@@ -1,8 +1,8 @@
 package com.hongstudio.kakaosearchimage.ui.imagedetail
 
 import androidx.lifecycle.SavedStateHandle
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.data.repository.DocumentRepository
-import com.hongstudio.local.model.LocalDocument
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,9 +16,9 @@ import javax.inject.Inject
 class ImageDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val documentRepository: DocumentRepository
-) : com.hongstudio.ui.base.BaseViewModel() {
+) : BaseViewModel() {
 
-    val detailItemStream: StateFlow<com.hongstudio.local.model.LocalDocument?> = savedStateHandle.getStateFlow("ImageDetailExtra", null)
+    val detailItemStream: StateFlow<DocumentDto?> = savedStateHandle.getStateFlow("ImageDetailExtra", null)
 
     val isFavorite: StateFlow<Boolean> = combine(
         documentRepository.getAll(),

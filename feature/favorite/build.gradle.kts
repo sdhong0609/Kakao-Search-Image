@@ -1,12 +1,12 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt.android)
 }
 
 android {
-    namespace = "com.hongstudio.kakaosearchimage"
+    namespace = "com.hongstudio.favorite"
     compileSdk = 34
 
     buildFeatures {
@@ -14,22 +14,16 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.hongstudio.kakaosearchimage"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -43,20 +37,14 @@ android {
 
 dependencies {
     implementation(project(":core:data"))
-    implementation(project(":core:local"))
-    implementation(project(":core:remote"))
     implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.timber)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.coil)
-    implementation(libs.androidx.activity.ktx)
+
     implementation(libs.androidx.fragment.ktx)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 

@@ -1,9 +1,7 @@
-package com.hongstudio.kakaosearchimage.ui.search
+package com.hongstudio.search
 
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.data.repository.DocumentRepository
-import com.hongstudio.local.model.LocalDocument
-import com.hongstudio.data.toLocal
-import com.hongstudio.kakaosearchimage.BuildConfig
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,19 +17,17 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
-) : com.hongstudio.ui.base.BaseViewModel() {
+) : BaseViewModel() {
 
-    private val _searchedItems = MutableStateFlow(listOf<com.hongstudio.local.model.LocalDocument>())
-    val searchedItems: StateFlow<List<com.hongstudio.local.model.LocalDocument>> = _searchedItems.asStateFlow()
+    private val _searchedItems = MutableStateFlow(listOf<DocumentDto>())
+    val searchedItems: StateFlow<List<DocumentDto>> = _searchedItems.asStateFlow()
 
     fun getSearchedItems(keyword: String) {
         if (keyword.isBlank()) return
 
         launch {
-            val response = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
-            _searchedItems.update {
-                response.documents.map { it.toLocal() }
-            }
+            val items = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
+            _searchedItems.update { items }
 
             updateFavorites()
         }
@@ -54,7 +50,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onClickFavorite(item: com.hongstudio.local.model.LocalDocument) {
+    fun onClickFavorite(item: DocumentDto) {
         launch {
             if (item.isFavorite) {
                 documentRepository.delete(item)

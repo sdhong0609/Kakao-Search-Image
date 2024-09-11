@@ -1,20 +1,19 @@
-package com.hongstudio.kakaosearchimage.ui.search
+package com.hongstudio.search
 
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hongstudio.local.model.LocalDocument
-import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.ui.base.BaseFragment
-import com.hongstudio.kakaosearchimage.databinding.FragmentSearchBinding
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.kakaosearchimage.ui.ImagesListAdapter
 import com.hongstudio.kakaosearchimage.ui.imagedetail.ImageDetailActivity
+import com.hongstudio.search.databinding.FragmentSearchBinding
+import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : com.hongstudio.ui.base.BaseFragment<FragmentSearchBinding>(
+class SearchFragment : BaseFragment<FragmentSearchBinding>(
     layoutId = R.layout.fragment_search,
     binder = FragmentSearchBinding::bind
 ) {
@@ -48,11 +47,11 @@ class SearchFragment : com.hongstudio.ui.base.BaseFragment<FragmentSearchBinding
         }
     }
 
-    private fun onClickFavorite(item: com.hongstudio.local.model.LocalDocument) {
+    private fun onClickFavorite(item: DocumentDto) {
         viewModel.onClickFavorite(item)
     }
 
-    private fun onClickItem(item: com.hongstudio.local.model.LocalDocument) {
+    private fun onClickItem(item: DocumentDto) {
         startActivity(ImageDetailActivity.newIntent(context ?: return, item))
     }
 }

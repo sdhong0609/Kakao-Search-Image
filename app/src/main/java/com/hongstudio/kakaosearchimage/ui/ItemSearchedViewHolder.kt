@@ -3,19 +3,19 @@ package com.hongstudio.kakaosearchimage.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import coil.load
-import com.hongstudio.local.model.LocalDocument
-import com.hongstudio.ui.base.BaseViewHolder
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.kakaosearchimage.databinding.ItemSearchedBinding
+import com.hongstudio.ui.base.BaseViewHolder
 
 class ItemSearchedViewHolder(
     parent: ViewGroup,
-    private val onClickFavorite: (item: com.hongstudio.local.model.LocalDocument) -> Unit,
-    private val onClickItem: (item: com.hongstudio.local.model.LocalDocument) -> Unit
-) : com.hongstudio.ui.base.BaseViewHolder<ItemSearchedBinding, com.hongstudio.local.model.LocalDocument>(
+    private val onClickFavorite: (item: DocumentDto) -> Unit,
+    private val onClickItem: (item: DocumentDto) -> Unit
+) : BaseViewHolder<ItemSearchedBinding, DocumentDto>(
     ItemSearchedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 ) {
 
-    override fun bind(item: com.hongstudio.local.model.LocalDocument) {
+    override fun bind(item: DocumentDto) {
         binding.imageViewThumbnail.load(item.thumbnailUrl)
         binding.textViewSiteName.text = item.displaySitename
         binding.imageViewFavorite.isSelected = item.isFavorite

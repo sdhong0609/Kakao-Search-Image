@@ -5,17 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
-import com.hongstudio.local.model.LocalDocument
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.kakaosearchimage.R
-import com.hongstudio.ui.base.BaseActivity
 import com.hongstudio.kakaosearchimage.databinding.ActivityImageDetailBinding
+import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @AndroidEntryPoint
-class ImageDetailActivity : com.hongstudio.ui.base.BaseActivity<ActivityImageDetailBinding>(
+class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     inflater = ActivityImageDetailBinding::inflate
 ) {
     private val viewModel: ImageDetailViewModel by viewModels()
@@ -55,7 +55,7 @@ class ImageDetailActivity : com.hongstudio.ui.base.BaseActivity<ActivityImageDet
     companion object {
         private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
 
-        fun newIntent(context: Context, item: com.hongstudio.local.model.LocalDocument): Intent {
+        fun newIntent(context: Context, item: DocumentDto): Intent {
             return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
         }
     }
