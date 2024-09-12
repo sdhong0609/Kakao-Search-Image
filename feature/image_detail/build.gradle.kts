@@ -40,8 +40,6 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:common"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
     implementation(libs.androidx.activity.ktx)
