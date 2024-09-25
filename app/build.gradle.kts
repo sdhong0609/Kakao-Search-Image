@@ -1,11 +1,7 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.hilt.android)
 }
 
@@ -18,9 +14,6 @@ android {
         buildConfig = true
     }
 
-    val properties = Properties()
-    properties.load(project.rootProject.file("key.properties").inputStream())
-
     defaultConfig {
         applicationId = "com.hongstudio.kakaosearchimage"
         minSdk = 26
@@ -29,9 +22,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
-        buildConfigField("String", "REST_API_KEY", "\"${properties.getProperty("REST_API_KEY")}\"")
     }
 
     buildTypes {
@@ -53,24 +43,17 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:data"))
+    implementation(project(":core:local"))
+    implementation(project(":core:remote"))
+    implementation(project(":core:ui"))
+    implementation(project(":feature:search"))
+    implementation(project(":feature:favorite"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.okhttp)
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
+
     implementation(libs.timber)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.coil)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.fragment.ktx)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 

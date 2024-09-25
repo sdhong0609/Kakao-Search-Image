@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_image_detail_sitename">출처 : %s</string>
+    <string name="activity_image_detail_link">링크 : %s</string>
+    <string name="activity_image_detail_date">작성날짜 : %1$d년 %2$d월 %3$d일</string>
+</resources>

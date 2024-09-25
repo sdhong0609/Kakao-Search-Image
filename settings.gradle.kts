@@ -21,3 +21,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "Kakao Search Image"
 include(":app")
+include(":core:data")
+include(":core:local")
+include(":core:remote")
+include(":core:ui")
+include(":feature")
+include(":feature:favorite")
+include(":feature:search")
+include(":feature:image_detail")
+include(":feature:common")
