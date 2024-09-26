@@ -30,6 +30,7 @@ abstract class BaseActivity<VB : ViewBinding>(
         super.onCreate(savedInstanceState)
         binding = inflater(layoutInflater)
         setContentView(binding)
+        handleDeepLink()
     }
 
     private fun setContentView(binding: ViewBinding) {
@@ -40,6 +41,15 @@ abstract class BaseActivity<VB : ViewBinding>(
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun handleDeepLink() {
+        val extras = intent.extras?.deepCopy() ?: Bundle()
+        val data = intent.data
+        data?.queryParameterNames?.forEach {
+            extras.putString(it, data.getQueryParameter(it))
+        }
+        intent.putExtras(extras)
     }
 
     protected fun <T> Flow<T>.observe(onChanged: (T) -> Unit) {

@@ -1,12 +1,10 @@
 package com.hongstudio.common.model
 
-import android.os.Parcelable
 import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.ui.base.BaseViewHolderItem
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class DocumentModel(
     val thumbnailUrl: String,
     val imageUrl: String,
@@ -14,9 +12,8 @@ data class DocumentModel(
     val docUrl: String,
     val datetimeString: String,
     val isFavorite: Boolean
-) : Parcelable, BaseViewHolderItem {
+) : BaseViewHolderItem {
 
-    @IgnoredOnParcel
     override val id: String = thumbnailUrl
 }
 

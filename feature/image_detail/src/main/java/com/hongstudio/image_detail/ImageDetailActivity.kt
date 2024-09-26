@@ -1,11 +1,8 @@
 package com.hongstudio.image_detail
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import coil.load
-import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.image_detail.databinding.ActivityImageDetailBinding
 import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,22 +20,21 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
         super.onCreate(savedInstanceState)
 
         viewModel.detailItemStream.observe { item ->
-            if (item == null) return@observe run { finish() }
 
-            binding.imageViewDetail.load(item.imageUrl) {
+            binding.imageViewDetail.load(item?.imageUrl) {
                 error(android.R.drawable.ic_delete)
             }
 
             binding.textViewDetailSiteName.text =
-                getString(R.string.activity_image_detail_sitename, item.displaySitename)
-            binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
+                getString(R.string.activity_image_detail_sitename, item?.displaySitename)
+            binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item?.docUrl)
 
-            val localDate = Instant.parse(item.datetimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
+            val localDate = item?.datetimeString?.let { Instant.parse(it).toLocalDateTime(TimeZone.currentSystemDefault()).date }
             binding.textViewDateTime.text = getString(
                 R.string.activity_image_detail_date,
-                localDate.year,
-                localDate.monthNumber,
-                localDate.dayOfMonth
+                localDate?.year,
+                localDate?.monthNumber,
+                localDate?.dayOfMonth
             )
         }
 
@@ -48,14 +44,6 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
 
         binding.imageViewFavorite.setOnClickListener {
             viewModel.onClickFavorite()
-        }
-    }
-
-    companion object {
-        private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
-
-        fun newIntent(context: Context, item: DocumentModel): Intent {
-            return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
         }
     }
 }
