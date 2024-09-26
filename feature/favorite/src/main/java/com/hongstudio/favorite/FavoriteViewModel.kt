@@ -4,6 +4,7 @@ import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.model.toDto
 import com.hongstudio.common.model.toUiModel
 import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
-) : com.hongstudio.ui.base.BaseViewModel() {
+) : BaseViewModel() {
 
     private val _favoriteItems = MutableStateFlow(listOf<DocumentModel>())
     val favoriteItems: StateFlow<List<DocumentModel>> = _favoriteItems.asStateFlow()
