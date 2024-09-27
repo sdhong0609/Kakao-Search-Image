@@ -3,17 +3,17 @@ package com.hongstudio.search
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.model.toDto
 import com.hongstudio.common.model.toUiModel
+import com.hongstudio.data.model.DocumentDto
 import com.hongstudio.data.repository.DocumentRepository
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,36 +21,32 @@ class SearchViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
+    private val savedDocuments: Flow<List<DocumentDto>> = documentRepository.getAll()
+
     private val _searchedItems = MutableStateFlow(listOf<DocumentModel>())
-    val searchedItems: StateFlow<List<DocumentModel>> = _searchedItems.asStateFlow()
+    val searchedItems: StateFlow<List<DocumentModel>> = combine(
+        savedDocuments,
+        _searchedItems
+    ) { savedDocuments, searchedItems ->
+        searchedItems.map { searchedItem ->
+            if (savedDocuments.any { it.thumbnailUrl == searchedItem.thumbnailUrl }) {
+                searchedItem.copy(isFavorite = true)
+            } else {
+                searchedItem.copy(isFavorite = false)
+            }
+        }
+    }.stateIn(
+        scope = this,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = listOf()
+    )
 
     fun getSearchedItems(keyword: String) {
         if (keyword.isBlank()) return
 
         launch {
-            val items = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
-            _searchedItems.update {
-                items.map { it.toUiModel() }
-            }
-
-            updateFavorites()
-        }
-    }
-
-    private fun updateFavorites() {
-        launch {
-            documentRepository.getAll().collectLatest { favorites ->
-                val updatedItems = withContext(Dispatchers.Default) {
-                    _searchedItems.value.map { localDocument ->
-                        if (favorites.any { it.thumbnailUrl == localDocument.thumbnailUrl }) {
-                            localDocument.copy(isFavorite = true)
-                        } else {
-                            localDocument.copy(isFavorite = false)
-                        }
-                    }
-                }
-                _searchedItems.update { updatedItems }
-            }
+            _searchedItems.value = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
+                .map { it.toUiModel() }
         }
     }
 
