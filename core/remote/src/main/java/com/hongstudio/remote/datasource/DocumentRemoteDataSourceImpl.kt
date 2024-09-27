@@ -12,11 +12,15 @@ class DocumentRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getSearchedImages(
         authorization: String,
-        query: String
+        query: String,
+        page: Int,
+        size: Int
     ): List<DocumentDto> {
         return searchImageApi.getSearchedImages(
             authorization = authorization,
-            query = query
+            query = query,
+            page = page,
+            size = size
         ).let {
             it.documents.map { documentRemote ->
                 documentRemote.toDto()

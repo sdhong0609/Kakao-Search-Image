@@ -6,6 +6,8 @@ interface DocumentRemoteDataSource {
 
     suspend fun getSearchedImages(
         authorization: String,
-        query: String
+        query: String,
+        page: Int,
+        size: Int
     ): List<DocumentDto>
 }

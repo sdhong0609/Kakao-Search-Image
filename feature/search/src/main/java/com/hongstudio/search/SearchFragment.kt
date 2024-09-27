@@ -7,9 +7,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.recyclerview.widget.RecyclerView
+import com.hongstudio.common.model.DocumentListItemType
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.ui.DocumentListAdapter
+import com.hongstudio.common.ui.EndlessRecyclerViewScrollListener
 import com.hongstudio.search.databinding.FragmentSearchBinding
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,8 +47,29 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
             viewModel.getSearchedItems(binding?.editTextSearch?.text.toString())
         }
 
-        binding?.recyclerViewSearch?.layoutManager = LinearLayoutManager(context)
-        binding?.recyclerViewSearch?.adapter = adapter
+        val scrollListener = object : EndlessRecyclerViewScrollListener(
+            layoutManager = binding?.recyclerViewSearch?.layoutManager as GridLayoutManager
+        ) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.loadNextData(page)
+            }
+        }
+
+
+        binding?.recyclerViewSearch?.run {
+            adapter = this@SearchFragment.adapter
+
+            (layoutManager as GridLayoutManager).spanSizeLookup = object : SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return when ((adapter as DocumentListAdapter).getItemViewType(position)) {
+                        DocumentListItemType.PROGRESSBAR.ordinal -> 2
+                        else -> if (position % 5 == 4) 2 else 1
+                    }
+                }
+            }
+
+            addOnScrollListener(scrollListener)
+        }
 
         viewModel.uiState.observe {
             when (it) {

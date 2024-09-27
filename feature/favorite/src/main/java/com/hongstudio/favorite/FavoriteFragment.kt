@@ -6,7 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.ui.DocumentListAdapter
 import com.hongstudio.favorite.databinding.FragmentFavoriteBinding
@@ -30,7 +31,11 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.recyclerViewFavorite?.layoutManager = LinearLayoutManager(context)
+        (binding?.recyclerViewFavorite?.layoutManager as GridLayoutManager).spanSizeLookup = object : SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position % 5 == 4) 2 else 1
+            }
+        }
         binding?.recyclerViewFavorite?.adapter = adapter
 
         viewModel.uiState.observe {

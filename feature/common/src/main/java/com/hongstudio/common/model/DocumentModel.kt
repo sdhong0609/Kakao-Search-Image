@@ -1,7 +1,6 @@
 package com.hongstudio.common.model
 
 import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.ui.base.BaseViewHolderItem
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,7 +11,7 @@ data class DocumentModel(
     val docUrl: String,
     val datetimeString: String,
     val isFavorite: Boolean
-) : BaseViewHolderItem {
+) : DocumentListItem {
 
     override val id: String = thumbnailUrl
 }

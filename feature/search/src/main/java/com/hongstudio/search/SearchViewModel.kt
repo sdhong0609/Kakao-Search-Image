@@ -1,6 +1,8 @@
 package com.hongstudio.search
 
+import com.hongstudio.common.model.DocumentListItem
 import com.hongstudio.common.model.DocumentModel
+import com.hongstudio.common.model.DocumentProgressbar
 import com.hongstudio.common.model.toDto
 import com.hongstudio.common.model.toUiModel
 import com.hongstudio.data.model.DocumentDto
@@ -24,9 +26,11 @@ class SearchViewModel @Inject constructor(
 
     private val savedDocuments: Flow<List<DocumentDto>> = documentRepository.getAll()
 
-    private val _searchedItems = MutableStateFlow<List<DocumentModel>?>(null)
+    private val _searchedItems = MutableStateFlow<List<DocumentListItem>?>(null)
 
     private val _isLoading = MutableStateFlow(false)
+
+    private var searchedKeyword = ""
 
     val uiState: StateFlow<SearchUiState> = combine(
         savedDocuments,
@@ -38,11 +42,15 @@ class SearchViewModel @Inject constructor(
             searchedItems == null -> SearchUiState.Idle
             searchedItems.isEmpty() -> SearchUiState.Empty
             else -> {
-                val updatedItems: List<DocumentModel> = searchedItems.map { searchedItem ->
-                    if (savedDocuments.any { it.thumbnailUrl == searchedItem.thumbnailUrl }) {
-                        searchedItem.copy(isFavorite = true)
+                val updatedItems: List<DocumentListItem> = searchedItems.map { searchedItem ->
+                    if (searchedItem is DocumentModel) {
+                        if (savedDocuments.any { it.thumbnailUrl == searchedItem.thumbnailUrl }) {
+                            searchedItem.copy(isFavorite = true)
+                        } else {
+                            searchedItem.copy(isFavorite = false)
+                        }
                     } else {
-                        searchedItem.copy(isFavorite = false)
+                        searchedItem
                     }
                 }
                 SearchUiState.Success(updatedItems)
@@ -57,12 +65,18 @@ class SearchViewModel @Inject constructor(
     )
 
     fun getSearchedItems(keyword: String) {
-        if (keyword.isBlank()) return
+        if (keyword.isBlank() || searchedKeyword == keyword) return
+
+        searchedKeyword = keyword
 
         launch {
             _isLoading.value = true
-            _searchedItems.value = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
-                .map { it.toUiModel() }
+            _searchedItems.value = documentRepository.getSearchedImages(
+                authorization = BuildConfig.REST_API_KEY,
+                query = searchedKeyword,
+                page = INITIAL_PAGE,
+                size = PAGE_SIZE
+            ).map { it.toUiModel() }
             _isLoading.value = false
         }
     }
@@ -75,5 +89,27 @@ class SearchViewModel @Inject constructor(
                 documentRepository.insert(item.copy(isFavorite = true).toDto())
             }
         }
+    }
+
+    fun loadNextData(page: Int) {
+        launch {
+            if (page > PAGE_MAX) return@launch
+            if (_searchedItems.value?.contains(DocumentProgressbar) == true) return@launch
+
+            _searchedItems.value = _searchedItems.value?.plus(DocumentProgressbar)
+            val newItems = documentRepository.getSearchedImages(
+                authorization = BuildConfig.REST_API_KEY,
+                query = searchedKeyword,
+                page = page,
+                size = PAGE_SIZE
+            ).map { it.toUiModel() }
+            _searchedItems.value = _searchedItems.value?.minus(DocumentProgressbar)?.plus(newItems)
+        }
+    }
+
+    companion object {
+        private const val INITIAL_PAGE = 1
+        private const val PAGE_SIZE = 10
+        private const val PAGE_MAX = 50
     }
 }
