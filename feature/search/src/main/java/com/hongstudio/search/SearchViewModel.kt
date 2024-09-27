@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -23,30 +24,46 @@ class SearchViewModel @Inject constructor(
 
     private val savedDocuments: Flow<List<DocumentDto>> = documentRepository.getAll()
 
-    private val _searchedItems = MutableStateFlow(listOf<DocumentModel>())
-    val searchedItems: StateFlow<List<DocumentModel>> = combine(
+    private val _searchedItems = MutableStateFlow<List<DocumentModel>?>(null)
+
+    private val _isLoading = MutableStateFlow(false)
+
+    val uiState: StateFlow<SearchUiState> = combine(
         savedDocuments,
-        _searchedItems
-    ) { savedDocuments, searchedItems ->
-        searchedItems.map { searchedItem ->
-            if (savedDocuments.any { it.thumbnailUrl == searchedItem.thumbnailUrl }) {
-                searchedItem.copy(isFavorite = true)
-            } else {
-                searchedItem.copy(isFavorite = false)
+        _searchedItems,
+        _isLoading
+    ) { savedDocuments, searchedItems, isLoading ->
+        when {
+            isLoading -> SearchUiState.Loading
+            searchedItems == null -> SearchUiState.Idle
+            searchedItems.isEmpty() -> SearchUiState.Empty
+            else -> {
+                val updatedItems: List<DocumentModel> = searchedItems.map { searchedItem ->
+                    if (savedDocuments.any { it.thumbnailUrl == searchedItem.thumbnailUrl }) {
+                        searchedItem.copy(isFavorite = true)
+                    } else {
+                        searchedItem.copy(isFavorite = false)
+                    }
+                }
+                SearchUiState.Success(updatedItems)
             }
         }
+    }.catch {
+        emit(SearchUiState.Error(it))
     }.stateIn(
         scope = this,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = listOf()
+        initialValue = SearchUiState.Idle
     )
 
     fun getSearchedItems(keyword: String) {
         if (keyword.isBlank()) return
 
         launch {
+            _isLoading.value = true
             _searchedItems.value = documentRepository.getSearchedImages(BuildConfig.REST_API_KEY, keyword)
                 .map { it.toUiModel() }
+            _isLoading.value = false
         }
     }
 
