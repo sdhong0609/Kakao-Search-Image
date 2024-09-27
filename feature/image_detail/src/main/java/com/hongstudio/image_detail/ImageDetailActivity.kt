@@ -1,6 +1,7 @@
 package com.hongstudio.image_detail
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import coil.load
 import com.hongstudio.image_detail.databinding.ActivityImageDetailBinding
@@ -19,31 +20,57 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.detailItemStream.observe { item ->
+        viewModel.uiState.observe {
+            when (it) {
+                is ImageDetailUiState.Loading -> {
+                    setVisibility(isLoading = true)
+                }
 
-            binding.imageViewDetail.load(item?.imageUrl) {
-                error(android.R.drawable.ic_delete)
+                is ImageDetailUiState.Found -> {
+                    val item = it.item
+                    setVisibility(isLoading = false)
+
+                    binding.run {
+                        imageViewDetail.load(item.imageUrl) {
+                            error(android.R.drawable.ic_delete)
+                        }
+                        textViewDetailSiteName.text =
+                            getString(R.string.activity_image_detail_sitename, item.displaySitename)
+                        textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
+
+                        val localDate = item.datetimeString.let { dateTimeString ->
+                            Instant.parse(dateTimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
+                        }
+                        textViewDateTime.text = getString(
+                            R.string.activity_image_detail_date,
+                            localDate.year,
+                            localDate.monthNumber,
+                            localDate.dayOfMonth
+                        )
+
+                        imageViewFavorite.isSelected = item.isFavorite
+                    }
+                }
+
+                is ImageDetailUiState.NotFound -> {
+                    finish()
+                }
             }
-
-            binding.textViewDetailSiteName.text =
-                getString(R.string.activity_image_detail_sitename, item?.displaySitename)
-            binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item?.docUrl)
-
-            val localDate = item?.datetimeString?.let { Instant.parse(it).toLocalDateTime(TimeZone.currentSystemDefault()).date }
-            binding.textViewDateTime.text = getString(
-                R.string.activity_image_detail_date,
-                localDate?.year,
-                localDate?.monthNumber,
-                localDate?.dayOfMonth
-            )
-        }
-
-        viewModel.isFavorite.observe {
-            binding.imageViewFavorite.isSelected = it
         }
 
         binding.imageViewFavorite.setOnClickListener {
             viewModel.onClickFavorite()
+        }
+    }
+
+    private fun setVisibility(isLoading: Boolean) {
+        binding.run {
+            progressBarImageDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
+            imageViewDetail.visibility = if (isLoading) View.GONE else View.VISIBLE
+            textViewDetailSiteName.visibility = if (isLoading) View.GONE else View.VISIBLE
+            textViewDocUrl.visibility = if (isLoading) View.GONE else View.VISIBLE
+            textViewDateTime.visibility = if (isLoading) View.GONE else View.VISIBLE
+            imageViewFavorite.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
     }
 }

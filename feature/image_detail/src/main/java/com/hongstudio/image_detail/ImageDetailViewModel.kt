@@ -8,7 +8,7 @@ import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -21,27 +21,34 @@ class ImageDetailViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
 ) : BaseViewModel() {
 
-    private val item: StateFlow<String> = savedStateHandle.getStateFlow("item", "")
+    private val savedDocuments = documentRepository.getAll()
 
-    val detailItemStream: StateFlow<DocumentModel?> = item.map {
+    private val item: DocumentModel? = (savedStateHandle["item"] ?: "").let {
         if (it.isBlank()) {
             null
         } else {
             Json.decodeFromString<DocumentModel>(it)
         }
-    }.stateIn(this, SharingStarted.WhileSubscribed(), null)
+    }
 
-    val isFavorite: StateFlow<Boolean> = combine(
-        documentRepository.getAll(),
-        detailItemStream
-    ) { favorites, detailItem ->
-        favorites.any { it.thumbnailUrl == detailItem?.thumbnailUrl }
-    }.stateIn(this, SharingStarted.WhileSubscribed(), false)
+    private val detailItemStream: StateFlow<DocumentModel?> = savedDocuments.map { documents ->
+        item?.copy(isFavorite = documents.any { it.thumbnailUrl == item.thumbnailUrl })
+    }.stateIn(this, SharingStarted.WhileSubscribed(), item)
+
+    val uiState: StateFlow<ImageDetailUiState> = detailItemStream.map {
+        if (it == null) {
+            ImageDetailUiState.NotFound
+        } else {
+            ImageDetailUiState.Found(it)
+        }
+    }.catch {
+        emit(ImageDetailUiState.NotFound)
+    }.stateIn(this, SharingStarted.WhileSubscribed(), ImageDetailUiState.Loading)
 
     fun onClickFavorite() {
         launch {
             val data = detailItemStream.value ?: return@launch
-            if (isFavorite.value) {
+            if (data.isFavorite) {
                 documentRepository.delete(data.toDto())
             } else {
                 documentRepository.insert(data.copy(isFavorite = true).toDto())
