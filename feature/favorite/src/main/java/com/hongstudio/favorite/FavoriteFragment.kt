@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.ui.DocumentListAdapter
+import com.hongstudio.data.DefaultJson
 import com.hongstudio.favorite.databinding.FragmentFavoriteBinding
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 @AndroidEntryPoint
 class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
@@ -90,7 +90,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(
     private fun onClickItem(item: DocumentModel) {
         val uri = "seongdeok://image/detail".toUri()
             .buildUpon()
-            .appendQueryParameter("item", Json.encodeToString(item))
+            .appendQueryParameter("item", DefaultJson.encodeToString(item))
             .build()
         val intent = Intent(Intent.ACTION_VIEW, uri)
         startActivity(intent)

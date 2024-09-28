@@ -3,6 +3,7 @@ package com.hongstudio.image_detail
 import androidx.lifecycle.SavedStateHandle
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.model.toDto
+import com.hongstudio.data.DefaultJson
 import com.hongstudio.data.repository.DocumentRepository
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +27,7 @@ class ImageDetailViewModel @Inject constructor(
         if (it.isBlank()) {
             null
         } else {
-            Json.decodeFromString<DocumentModel>(it)
+            DefaultJson.decodeFromString<DocumentModel>(it)
         }
     }
 
