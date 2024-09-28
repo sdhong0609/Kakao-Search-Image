@@ -72,10 +72,8 @@ class SearchViewModel @Inject constructor(
         launch {
             _isLoading.value = true
             _searchedItems.value = documentRepository.getSearchedImages(
-                authorization = BuildConfig.REST_API_KEY,
                 query = searchedKeyword,
-                page = INITIAL_PAGE,
-                size = PAGE_SIZE
+                page = INITIAL_PAGE
             ).map { it.toUiModel() }
             _isLoading.value = false
         }
@@ -98,10 +96,8 @@ class SearchViewModel @Inject constructor(
 
             _searchedItems.value = _searchedItems.value?.plus(DocumentProgressbar)
             val newItems = documentRepository.getSearchedImages(
-                authorization = BuildConfig.REST_API_KEY,
                 query = searchedKeyword,
-                page = page,
-                size = PAGE_SIZE
+                page = page
             ).map { it.toUiModel() }
             _searchedItems.value = _searchedItems.value?.minus(DocumentProgressbar)?.plus(newItems)
         }

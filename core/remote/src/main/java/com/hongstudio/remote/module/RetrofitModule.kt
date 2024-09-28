@@ -1,7 +1,7 @@
 package com.hongstudio.remote.module
 
-import com.hongstudio.data.BuildConfig
 import com.hongstudio.data.DefaultJson
+import com.hongstudio.remote.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

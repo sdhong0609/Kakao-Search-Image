@@ -26,16 +26,12 @@ class DocumentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSearchedImages(
-        authorization: String,
         query: String,
-        page: Int,
-        size: Int
+        page: Int
     ): List<DocumentDto> {
         return remoteDataSource.getSearchedImages(
-            authorization = authorization,
             query = query,
-            page = page,
-            size = size
+            page = page
         )
     }
 }

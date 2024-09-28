@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -12,20 +10,11 @@ android {
     namespace = "com.hongstudio.data"
     compileSdk = 34
 
-    buildFeatures {
-        buildConfig = true
-    }
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("key.properties").inputStream())
-
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
     }
 
     buildTypes {
