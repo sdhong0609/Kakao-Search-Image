@@ -23,7 +23,9 @@ class FavoriteViewModel @Inject constructor(
         if (it.isEmpty()) {
             FavoriteUiState.Empty
         } else {
-            FavoriteUiState.Success(it.map { dto -> dto.toUiModel() })
+            FavoriteUiState.Success(it.map { dto ->
+                dto.toUiModel().copy(isFavorite = true)
+            })
         }
     }.catch {
         emit(FavoriteUiState.Error(it))

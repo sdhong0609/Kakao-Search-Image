@@ -23,7 +23,7 @@ fun DocumentDto.toUiModel(): DocumentModel {
         displaySitename = displaySitename,
         docUrl = docUrl,
         datetimeString = datetimeString,
-        isFavorite = isFavorite
+        isFavorite = false
     )
 }
 
@@ -33,7 +33,6 @@ fun DocumentModel.toDto(): DocumentDto {
         imageUrl = imageUrl,
         displaySitename = displaySitename,
         docUrl = docUrl,
-        datetimeString = datetimeString,
-        isFavorite = isFavorite
+        datetimeString = datetimeString
     )
 }

@@ -24,6 +24,5 @@ fun DocumentRemote.toDto(): DocumentDto = DocumentDto(
     imageUrl = imageUrl,
     displaySitename = displaySitename,
     docUrl = docUrl,
-    datetimeString = datetime.toString(),
-    isFavorite = false
+    datetimeString = datetime.toString()
 )

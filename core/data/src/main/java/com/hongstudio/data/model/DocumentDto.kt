@@ -5,6 +5,5 @@ data class DocumentDto(
     val imageUrl: String,
     val displaySitename: String,
     val docUrl: String,
-    val datetimeString: String,
-    val isFavorite: Boolean
+    val datetimeString: String
 )
