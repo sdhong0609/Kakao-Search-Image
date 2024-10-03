@@ -10,6 +10,8 @@ interface SearchImageApi {
     @GET("v2/search/image")
     suspend fun getSearchedImages(
         @Header("Authorization") authorization: String,
-        @Query("query") query: String
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
     ): GetSearchedImagesResponse
 }

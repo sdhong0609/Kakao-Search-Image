@@ -11,8 +11,7 @@ data class DocumentLocal(
     val imageUrl: String,
     val displaySitename: String,
     val docUrl: String,
-    val datetimeString: String,
-    val isFavorite: Boolean
+    val datetimeString: String
 )
 
 fun DocumentDto.toLocal() = DocumentLocal(
@@ -20,8 +19,7 @@ fun DocumentDto.toLocal() = DocumentLocal(
     imageUrl = imageUrl,
     displaySitename = displaySitename,
     docUrl = docUrl,
-    datetimeString = datetimeString,
-    isFavorite = isFavorite
+    datetimeString = datetimeString
 )
 
 fun DocumentLocal.toDto() = DocumentDto(
@@ -29,6 +27,5 @@ fun DocumentLocal.toDto() = DocumentDto(
     imageUrl = imageUrl,
     displaySitename = displaySitename,
     docUrl = docUrl,
-    datetimeString = datetimeString,
-    isFavorite = isFavorite
+    datetimeString = datetimeString
 )

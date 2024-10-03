@@ -12,7 +12,7 @@ interface DocumentRepository {
     suspend fun delete(documentDto: DocumentDto)
 
     suspend fun getSearchedImages(
-        authorization: String,
-        query: String
+        query: String,
+        page: Int
     ): List<DocumentDto>
 }

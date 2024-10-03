@@ -5,7 +5,7 @@ import com.hongstudio.data.model.DocumentDto
 interface DocumentRemoteDataSource {
 
     suspend fun getSearchedImages(
-        authorization: String,
-        query: String
+        query: String,
+        page: Int
     ): List<DocumentDto>
 }

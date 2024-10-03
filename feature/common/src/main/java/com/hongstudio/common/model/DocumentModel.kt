@@ -1,12 +1,9 @@
 package com.hongstudio.common.model
 
-import android.os.Parcelable
 import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.ui.base.BaseViewHolderItem
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class DocumentModel(
     val thumbnailUrl: String,
     val imageUrl: String,
@@ -14,9 +11,8 @@ data class DocumentModel(
     val docUrl: String,
     val datetimeString: String,
     val isFavorite: Boolean
-) : Parcelable, BaseViewHolderItem {
+) : DocumentListItem {
 
-    @IgnoredOnParcel
     override val id: String = thumbnailUrl
 }
 
@@ -27,7 +23,7 @@ fun DocumentDto.toUiModel(): DocumentModel {
         displaySitename = displaySitename,
         docUrl = docUrl,
         datetimeString = datetimeString,
-        isFavorite = isFavorite
+        isFavorite = false
     )
 }
 
@@ -37,7 +33,6 @@ fun DocumentModel.toDto(): DocumentDto {
         imageUrl = imageUrl,
         displaySitename = displaySitename,
         docUrl = docUrl,
-        datetimeString = datetimeString,
-        isFavorite = isFavorite
+        datetimeString = datetimeString
     )
 }

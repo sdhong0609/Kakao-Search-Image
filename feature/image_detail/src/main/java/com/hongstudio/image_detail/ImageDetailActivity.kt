@@ -1,11 +1,9 @@
 package com.hongstudio.image_detail
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import coil.load
-import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.image_detail.databinding.ActivityImageDetailBinding
 import com.hongstudio.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,28 +20,42 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.detailItemStream.observe { item ->
-            if (item == null) return@observe run { finish() }
+        viewModel.uiState.observe {
+            when (it) {
+                is ImageDetailUiState.Loading -> {
+                    setVisibility(isLoading = true)
+                }
 
-            binding.imageViewDetail.load(item.imageUrl) {
-                error(android.R.drawable.ic_delete)
+                is ImageDetailUiState.Found -> {
+                    val item = it.item
+                    setVisibility(isLoading = false)
+
+                    binding.run {
+                        imageViewDetail.load(item.imageUrl) {
+                            error(android.R.drawable.ic_delete)
+                        }
+                        textViewDetailSiteName.text =
+                            getString(R.string.activity_image_detail_sitename, item.displaySitename)
+                        textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
+
+                        val localDate = item.datetimeString.let { dateTimeString ->
+                            Instant.parse(dateTimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
+                        }
+                        textViewDateTime.text = getString(
+                            R.string.activity_image_detail_date,
+                            localDate.year,
+                            localDate.monthNumber,
+                            localDate.dayOfMonth
+                        )
+
+                        imageViewFavorite.isSelected = item.isFavorite
+                    }
+                }
+
+                is ImageDetailUiState.NotFound -> {
+                    finish()
+                }
             }
-
-            binding.textViewDetailSiteName.text =
-                getString(R.string.activity_image_detail_sitename, item.displaySitename)
-            binding.textViewDocUrl.text = getString(R.string.activity_image_detail_link, item.docUrl)
-
-            val localDate = Instant.parse(item.datetimeString).toLocalDateTime(TimeZone.currentSystemDefault()).date
-            binding.textViewDateTime.text = getString(
-                R.string.activity_image_detail_date,
-                localDate.year,
-                localDate.monthNumber,
-                localDate.dayOfMonth
-            )
-        }
-
-        viewModel.isFavorite.observe {
-            binding.imageViewFavorite.isSelected = it
         }
 
         binding.imageViewFavorite.setOnClickListener {
@@ -51,11 +63,14 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>(
         }
     }
 
-    companion object {
-        private const val IMAGE_DETAIL_EXTRA = "ImageDetailExtra"
-
-        fun newIntent(context: Context, item: DocumentModel): Intent {
-            return Intent(context, ImageDetailActivity::class.java).putExtra(IMAGE_DETAIL_EXTRA, item)
+    private fun setVisibility(isLoading: Boolean) {
+        binding.run {
+            progressBarImageDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
+            imageViewDetail.visibility = if (isLoading) View.GONE else View.VISIBLE
+            textViewDetailSiteName.visibility = if (isLoading) View.GONE else View.VISIBLE
+            textViewDocUrl.visibility = if (isLoading) View.GONE else View.VISIBLE
+            textViewDateTime.visibility = if (isLoading) View.GONE else View.VISIBLE
+            imageViewFavorite.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
     }
 }

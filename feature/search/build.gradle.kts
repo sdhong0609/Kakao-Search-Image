@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -13,19 +11,13 @@ android {
 
     buildFeatures {
         viewBinding = true
-        buildConfig = true
     }
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("key.properties").inputStream())
 
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "REST_API_KEY", "\"${properties.getProperty("REST_API_KEY")}\"")
     }
 
     buildTypes {
