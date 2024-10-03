@@ -39,7 +39,6 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":feature:common"))
-    implementation(project(":feature:image_detail"))
 
     implementation(libs.material)
 
