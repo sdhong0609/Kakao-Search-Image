@@ -17,6 +17,8 @@ import com.hongstudio.common.ui.EndlessRecyclerViewScrollListener
 import com.hongstudio.search.databinding.FragmentSearchBinding
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -92,12 +94,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
                 )
 
                 is SearchUiState.Success -> {
-                    adapter.submitList(it.items)
-                    setVisibility(
-                        progressBarVisible = false,
-                        noResultVisible = false,
-                        recyclerViewVisible = true
-                    )
+                    adapter.submitList(it.items) {
+                        launch {
+                            delay(1000)
+                            setVisibility(
+                                progressBarVisible = false,
+                                noResultVisible = false,
+                                recyclerViewVisible = true
+                            )
+                        }
+                    }
                 }
 
                 is SearchUiState.Error -> {
@@ -119,7 +125,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     ) {
         binding?.progressBarSearch?.visibility = if (progressBarVisible) View.VISIBLE else View.GONE
         binding?.textViewNoResult?.visibility = if (noResultVisible) View.VISIBLE else View.GONE
-        binding?.recyclerViewSearch?.visibility = if (recyclerViewVisible) View.VISIBLE else View.GONE
+        binding?.recyclerViewSearch?.visibility = if (recyclerViewVisible) View.VISIBLE else View.INVISIBLE
     }
 
     private fun onClickFavorite(item: DocumentModel) {
