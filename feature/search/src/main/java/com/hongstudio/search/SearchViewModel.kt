@@ -92,7 +92,8 @@ class SearchViewModel @Inject constructor(
     fun loadNextData(page: Int) {
         launch {
             if (page > PAGE_MAX) return@launch
-            if (_searchedItems.value?.contains(DocumentProgressbar) == true) return@launch
+            if (_searchedItems.value?.let { it.size < 10 } == true) return@launch
+            if (_searchedItems.value?.lastOrNull() is DocumentProgressbar) return@launch
 
             _searchedItems.value = _searchedItems.value?.plus(DocumentProgressbar)
             val newItems = documentRepository.getSearchedImages(
