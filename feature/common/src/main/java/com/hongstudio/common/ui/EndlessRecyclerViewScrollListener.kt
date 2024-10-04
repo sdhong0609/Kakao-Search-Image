@@ -23,7 +23,7 @@ abstract class EndlessRecyclerViewScrollListener(
     private var loading = true
 
     // Sets the starting page index
-    private val startingPageIndex = 0
+    private val startingPageIndex = 1
 
     init {
         visibleThreshold = when (layoutManager) {
