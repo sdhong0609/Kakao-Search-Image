@@ -28,14 +28,12 @@ class SearchViewModel @Inject constructor(
 
     private val _searchedItems = MutableStateFlow<List<DocumentListItem>?>(null)
 
-    private val _isLoading = MutableStateFlow(false)
-
     private var searchedKeyword = ""
 
     val uiState: StateFlow<SearchUiState> = combine(
         savedDocuments,
         _searchedItems,
-        _isLoading
+        isLoading
     ) { savedDocuments, searchedItems, isLoading ->
         when {
             isLoading -> SearchUiState.Loading
@@ -69,13 +67,11 @@ class SearchViewModel @Inject constructor(
 
         searchedKeyword = keyword
 
-        launch {
-            _isLoading.value = true
+        launchWithLoading {
             _searchedItems.value = documentRepository.getSearchedImages(
                 query = searchedKeyword,
                 page = INITIAL_PAGE
             ).map { it.toUiModel() }
-            _isLoading.value = false
         }
     }
 
