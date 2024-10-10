@@ -1,6 +1,6 @@
 package com.hongstudio.data.module
 
-import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.core.domain.repository.DocumentRepository
 import com.hongstudio.data.repository.DocumentRepositoryImpl
 import dagger.Binds
 import dagger.Module

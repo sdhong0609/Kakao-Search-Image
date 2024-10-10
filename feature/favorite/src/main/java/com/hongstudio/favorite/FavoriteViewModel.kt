@@ -1,9 +1,10 @@
 package com.hongstudio.favorite
 
 import com.hongstudio.common.model.DocumentModel
-import com.hongstudio.common.model.toDto
+import com.hongstudio.common.model.toDomain
 import com.hongstudio.common.model.toUiModel
-import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.core.domain.usecase.DeleteDocumentUseCase
+import com.hongstudio.core.domain.usecase.GetSavedDocumentsUseCase
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,10 +17,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val documentRepository: DocumentRepository
+    getSavedDocumentsUseCase: GetSavedDocumentsUseCase,
+    private val deleteDocumentUseCase: DeleteDocumentUseCase
 ) : BaseViewModel() {
 
-    val uiState: StateFlow<FavoriteUiState> = documentRepository.getAll().map {
+    val uiState: StateFlow<FavoriteUiState> = getSavedDocumentsUseCase().map {
         if (it.isEmpty()) {
             FavoriteUiState.Empty
         } else {
@@ -37,7 +39,7 @@ class FavoriteViewModel @Inject constructor(
 
     fun deleteFavorite(item: DocumentModel) {
         launch {
-            documentRepository.delete(item.toDto())
+            deleteDocumentUseCase(item.toDomain())
         }
     }
 }

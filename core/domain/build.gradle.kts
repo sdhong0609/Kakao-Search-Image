@@ -3,15 +3,12 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.hongstudio.image_detail"
+    namespace = "com.hongstudio.core.domain"
     compileSdk = 34
-
-    buildFeatures {
-        viewBinding = true
-    }
 
     defaultConfig {
         minSdk = 26
@@ -36,20 +33,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:domain"))
-    implementation(project(":core:ui"))
-    implementation(project(":feature:common"))
-
-    implementation(libs.material)
-
-    implementation(libs.androidx.activity.ktx)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation(libs.kotlinx.datetime)
+    api(libs.timber)
 
-    implementation(libs.coil)
+    api(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -3,13 +3,14 @@ package com.hongstudio.search
 import com.hongstudio.common.model.DocumentListItem
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.model.DocumentProgressbar
-import com.hongstudio.common.model.toDto
+import com.hongstudio.common.model.toDomain
 import com.hongstudio.common.model.toUiModel
-import com.hongstudio.data.model.DocumentDto
-import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.core.domain.usecase.DeleteDocumentUseCase
+import com.hongstudio.core.domain.usecase.GetSavedDocumentsUseCase
+import com.hongstudio.core.domain.usecase.GetSearchedImagesUseCase
+import com.hongstudio.core.domain.usecase.InsertDocumentUseCase
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,17 +22,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val documentRepository: DocumentRepository
+    getSavedDocumentsUseCase: GetSavedDocumentsUseCase,
+    private val insertDocumentUseCase: InsertDocumentUseCase,
+    private val deleteDocumentUseCase: DeleteDocumentUseCase,
+    private val getSearchedImagesUseCase: GetSearchedImagesUseCase
 ) : BaseViewModel() {
-
-    private val savedDocuments: Flow<List<DocumentDto>> = documentRepository.getAll()
 
     private val _searchedItems = MutableStateFlow<List<DocumentListItem>?>(null)
 
     private var searchedKeyword = ""
 
     val uiState: StateFlow<SearchUiState> = combine(
-        savedDocuments,
+        getSavedDocumentsUseCase(),
         _searchedItems,
         isLoading
     ) { savedDocuments, searchedItems, isLoading ->
@@ -68,8 +70,8 @@ class SearchViewModel @Inject constructor(
         searchedKeyword = keyword
 
         launchWithLoading {
-            _searchedItems.value = documentRepository.getSearchedImages(
-                query = searchedKeyword,
+            _searchedItems.value = getSearchedImagesUseCase(
+                keyword = searchedKeyword,
                 page = INITIAL_PAGE
             ).map { it.toUiModel() }
         }
@@ -78,9 +80,9 @@ class SearchViewModel @Inject constructor(
     fun onClickFavorite(item: DocumentModel) {
         launch {
             if (item.isFavorite) {
-                documentRepository.delete(item.toDto())
+                deleteDocumentUseCase(item.toDomain())
             } else {
-                documentRepository.insert(item.copy(isFavorite = true).toDto())
+                insertDocumentUseCase(item.copy(isFavorite = true).toDomain())
             }
         }
     }
@@ -92,8 +94,8 @@ class SearchViewModel @Inject constructor(
             if (_searchedItems.value?.lastOrNull() is DocumentProgressbar) return@launch
 
             _searchedItems.value = _searchedItems.value?.plus(DocumentProgressbar)
-            val newItems = documentRepository.getSearchedImages(
-                query = searchedKeyword,
+            val newItems = getSearchedImagesUseCase(
+                keyword = searchedKeyword,
                 page = page
             ).map { it.toUiModel() }
             _searchedItems.value = _searchedItems.value?.minus(DocumentProgressbar)?.plus(newItems)

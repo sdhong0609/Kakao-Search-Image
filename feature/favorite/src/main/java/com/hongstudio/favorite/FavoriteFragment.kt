@@ -8,9 +8,9 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import com.hongstudio.common.DefaultJson
 import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.ui.DocumentListAdapter
-import com.hongstudio.data.DefaultJson
 import com.hongstudio.favorite.databinding.FragmentFavoriteBinding
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
