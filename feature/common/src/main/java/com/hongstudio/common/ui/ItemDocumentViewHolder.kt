@@ -27,4 +27,11 @@ class ItemDocumentViewHolder(
             onClickFavorite(item)
         }
     }
+
+    internal fun bindFavorite(item: DocumentModel) {
+        binding.imageViewFavorite.isSelected = item.isFavorite
+        binding.imageViewFavorite.setOnClickListener {
+            onClickFavorite(item)
+        }
+    }
 }

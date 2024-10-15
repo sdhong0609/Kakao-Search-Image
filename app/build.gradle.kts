@@ -43,12 +43,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
     implementation(project(":core:data"))
     implementation(project(":core:local"))
     implementation(project(":core:remote"))
     implementation(project(":core:ui"))
+    implementation(project(":feature:common"))
     implementation(project(":feature:search"))
     implementation(project(":feature:favorite"))
+    implementation(project(":feature:image_detail"))
 
     implementation(libs.material)
 

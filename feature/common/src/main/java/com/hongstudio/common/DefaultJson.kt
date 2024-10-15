@@ -1,4 +1,4 @@
-package com.hongstudio.data
+package com.hongstudio.common
 
 import kotlinx.serialization.json.Json
 

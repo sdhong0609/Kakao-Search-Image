@@ -17,6 +17,8 @@ import com.hongstudio.common.ui.EndlessRecyclerViewScrollListener
 import com.hongstudio.search.databinding.FragmentSearchBinding
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -35,8 +37,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val scrollListener = object : EndlessRecyclerViewScrollListener(
+            layoutManager = binding?.recyclerViewSearch?.layoutManager as GridLayoutManager
+        ) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.loadNextData(page)
+            }
+        }
+
         binding?.editTextSearch?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                scrollListener.resetState()
                 viewModel.getSearchedItems(binding?.editTextSearch?.text.toString())
                 return@setOnEditorActionListener true
             }
@@ -44,15 +55,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         }
 
         binding?.imageButtonSearch?.setOnClickListener {
+            scrollListener.resetState()
             viewModel.getSearchedItems(binding?.editTextSearch?.text.toString())
-        }
-
-        val scrollListener = object : EndlessRecyclerViewScrollListener(
-            layoutManager = binding?.recyclerViewSearch?.layoutManager as GridLayoutManager
-        ) {
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                viewModel.loadNextData(page)
-            }
         }
 
 
@@ -92,12 +96,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
                 )
 
                 is SearchUiState.Success -> {
-                    adapter.submitList(it.items)
-                    setVisibility(
-                        progressBarVisible = false,
-                        noResultVisible = false,
-                        recyclerViewVisible = true
-                    )
+                    adapter.submitList(it.items) {
+                        launch {
+                            delay(1000)
+                            setVisibility(
+                                progressBarVisible = false,
+                                noResultVisible = false,
+                                recyclerViewVisible = true
+                            )
+                        }
+                    }
                 }
 
                 is SearchUiState.Error -> {
@@ -119,7 +127,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     ) {
         binding?.progressBarSearch?.visibility = if (progressBarVisible) View.VISIBLE else View.GONE
         binding?.textViewNoResult?.visibility = if (noResultVisible) View.VISIBLE else View.GONE
-        binding?.recyclerViewSearch?.visibility = if (recyclerViewVisible) View.VISIBLE else View.GONE
+        binding?.recyclerViewSearch?.visibility = if (recyclerViewVisible) View.VISIBLE else View.INVISIBLE
     }
 
     private fun onClickFavorite(item: DocumentModel) {

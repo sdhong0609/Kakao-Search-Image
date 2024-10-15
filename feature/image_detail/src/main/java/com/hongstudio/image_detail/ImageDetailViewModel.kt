@@ -1,10 +1,12 @@
 package com.hongstudio.image_detail
 
 import androidx.lifecycle.SavedStateHandle
+import com.hongstudio.common.DefaultJson
 import com.hongstudio.common.model.DocumentModel
-import com.hongstudio.common.model.toDto
-import com.hongstudio.data.DefaultJson
-import com.hongstudio.data.repository.DocumentRepository
+import com.hongstudio.common.model.toDomain
+import com.hongstudio.core.domain.usecase.DeleteDocumentUseCase
+import com.hongstudio.core.domain.usecase.GetSavedDocumentsUseCase
+import com.hongstudio.core.domain.usecase.InsertDocumentUseCase
 import com.hongstudio.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,10 +20,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ImageDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val documentRepository: DocumentRepository
+    getSavedDocumentsUseCase: GetSavedDocumentsUseCase,
+    private val insertDocumentUseCase: InsertDocumentUseCase,
+    private val deleteDocumentUseCase: DeleteDocumentUseCase
 ) : BaseViewModel() {
-
-    private val savedDocuments = documentRepository.getAll()
 
     private val item: DocumentModel? = (savedStateHandle["item"] ?: "").let {
         if (it.isBlank()) {
@@ -31,7 +33,7 @@ class ImageDetailViewModel @Inject constructor(
         }
     }
 
-    private val detailItemStream: StateFlow<DocumentModel?> = savedDocuments.map { documents ->
+    private val detailItemStream: StateFlow<DocumentModel?> = getSavedDocumentsUseCase().map { documents ->
         item?.copy(isFavorite = documents.any { it.thumbnailUrl == item.thumbnailUrl })
     }.stateIn(this, SharingStarted.WhileSubscribed(), item)
 
@@ -49,9 +51,9 @@ class ImageDetailViewModel @Inject constructor(
         launch {
             val data = detailItemStream.value ?: return@launch
             if (data.isFavorite) {
-                documentRepository.delete(data.toDto())
+                deleteDocumentUseCase(data.toDomain())
             } else {
-                documentRepository.insert(data.copy(isFavorite = true).toDto())
+                insertDocumentUseCase(data.copy(isFavorite = true).toDomain())
             }
         }
     }

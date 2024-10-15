@@ -1,6 +1,6 @@
 package com.hongstudio.common.model
 
-import com.hongstudio.data.model.DocumentDto
+import com.hongstudio.core.domain.Document
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +16,7 @@ data class DocumentModel(
     override val id: String = thumbnailUrl
 }
 
-fun DocumentDto.toUiModel(): DocumentModel {
+fun Document.toUiModel(): DocumentModel {
     return DocumentModel(
         thumbnailUrl = thumbnailUrl,
         imageUrl = imageUrl,
@@ -27,8 +27,8 @@ fun DocumentDto.toUiModel(): DocumentModel {
     )
 }
 
-fun DocumentModel.toDto(): DocumentDto {
-    return DocumentDto(
+fun DocumentModel.toDomain(): Document {
+    return Document(
         thumbnailUrl = thumbnailUrl,
         imageUrl = imageUrl,
         displaySitename = displaySitename,
