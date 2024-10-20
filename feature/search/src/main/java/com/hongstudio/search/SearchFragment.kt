@@ -6,6 +6,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
@@ -17,8 +19,6 @@ import com.hongstudio.common.ui.EndlessRecyclerViewScrollListener
 import com.hongstudio.search.databinding.FragmentSearchBinding
 import com.hongstudio.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -75,45 +75,30 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
             addOnScrollListener(scrollListener)
         }
 
+        viewModel.isLoading.observe { isLoading ->
+            if (isLoading) {
+                setVisibility(
+                    progressBarVisible = true,
+                    recyclerViewVisible = false
+                )
+            } else {
+                setVisibility(recyclerViewVisible = true)
+            }
+        }
+
         viewModel.uiState.observe {
             when (it) {
-                is SearchUiState.Idle -> setVisibility(
-                    progressBarVisible = false,
-                    noResultVisible = false,
-                    recyclerViewVisible = false
-                )
-
-                is SearchUiState.Loading -> setVisibility(
-                    progressBarVisible = true,
-                    noResultVisible = false,
-                    recyclerViewVisible = false
-                )
+                is SearchUiState.Idle -> setVisibility(recyclerViewVisible = false)
 
                 is SearchUiState.Empty -> setVisibility(
-                    progressBarVisible = false,
                     noResultVisible = true,
                     recyclerViewVisible = false
                 )
 
-                is SearchUiState.Success -> {
-                    adapter.submitList(it.items) {
-                        launch {
-                            delay(1000)
-                            setVisibility(
-                                progressBarVisible = false,
-                                noResultVisible = false,
-                                recyclerViewVisible = true
-                            )
-                        }
-                    }
-                }
+                is SearchUiState.Success -> adapter.submitList(it.items)
 
                 is SearchUiState.Error -> {
-                    setVisibility(
-                        progressBarVisible = false,
-                        noResultVisible = false,
-                        recyclerViewVisible = false
-                    )
+                    setVisibility(recyclerViewVisible = false)
                     Toast.makeText(context, it.error?.message, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -121,13 +106,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     }
 
     private fun setVisibility(
-        progressBarVisible: Boolean,
-        noResultVisible: Boolean,
+        progressBarVisible: Boolean = false,
+        noResultVisible: Boolean = false,
         recyclerViewVisible: Boolean
     ) {
-        binding?.progressBarSearch?.visibility = if (progressBarVisible) View.VISIBLE else View.GONE
-        binding?.textViewNoResult?.visibility = if (noResultVisible) View.VISIBLE else View.GONE
-        binding?.recyclerViewSearch?.visibility = if (recyclerViewVisible) View.VISIBLE else View.INVISIBLE
+        binding?.progressBarSearch?.isVisible = progressBarVisible
+        binding?.textViewNoResult?.isVisible = noResultVisible
+        binding?.recyclerViewSearch?.isInvisible = !recyclerViewVisible
     }
 
     private fun onClickFavorite(item: DocumentModel) {
