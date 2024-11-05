@@ -10,9 +10,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DocumentRepositoryModule {
+interface DocumentRepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindDocumentRepository(repository: DocumentRepositoryImpl): DocumentRepository
+    fun bindDocumentRepository(repository: DocumentRepositoryImpl): DocumentRepository
 }

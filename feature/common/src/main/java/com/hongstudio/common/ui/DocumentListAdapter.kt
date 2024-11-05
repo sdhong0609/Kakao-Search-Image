@@ -9,11 +9,26 @@ import com.hongstudio.common.model.DocumentModel
 import com.hongstudio.common.model.DocumentProgressbar
 import com.hongstudio.ui.base.BaseListAdapter
 import com.hongstudio.ui.base.BaseViewHolder
+import com.hongstudio.ui.base.CommonDiffCallback
 
 class DocumentListAdapter(
     private val onClickFavorite: (item: DocumentModel) -> Unit,
     private val onClickItem: (item: DocumentModel) -> Unit,
-) : BaseListAdapter<DocumentListItem>(DocumentDiffCallback) {
+) : BaseListAdapter<DocumentListItem>(object : CommonDiffCallback<DocumentListItem>() {
+    override fun getChangePayload(oldItem: DocumentListItem, newItem: DocumentListItem): Any? {
+        return when {
+            oldItem is DocumentModel && newItem is DocumentModel -> {
+                if (oldItem.isFavorite != newItem.isFavorite) {
+                    DocumentChangePayload.Favorite(newItem)
+                } else {
+                    super.getChangePayload(oldItem, newItem)
+                }
+            }
+
+            else -> super.getChangePayload(oldItem, newItem)
+        }
+    }
+}) {
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {

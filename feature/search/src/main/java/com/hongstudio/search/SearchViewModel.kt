@@ -34,11 +34,9 @@ class SearchViewModel @Inject constructor(
 
     val uiState: StateFlow<SearchUiState> = combine(
         getSavedDocumentsUseCase(),
-        _searchedItems,
-        isLoading
-    ) { savedDocuments, searchedItems, isLoading ->
+        _searchedItems
+    ) { savedDocuments, searchedItems ->
         when {
-            isLoading -> SearchUiState.Loading
             searchedItems == null -> SearchUiState.Idle
             searchedItems.isEmpty() -> SearchUiState.Empty
             else -> {
